@@ -1,63 +1,81 @@
 @model HotelBookingSystem.ViewModels.RoomTypeCardViewModel
+
 @{
     ViewData["Title"] = Model.Name;
 }
-<div class="container py-5" style="margin-top: 70px;">
-    <div class="row">
-        <div class="col-md-7">
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-            {
-                <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.Name" />
-            }
-            <h2 class="mt-4" style="font-family: 'Playfair Display', serif;">@Model.Name</h2>
-            <p class="text-muted">@Model.SizeSqFt sq.ft &bull; @Model.BedType &bull; @Model.ViewType &bull; Up to
-                @Model.MaxGuests guests (@Model.MaxAdults adults, @Model.MaxChildren children)</p>
-                <p>@Model.Description</p>
-                @if (Model.AmenityNames.Any())
-                {
-                    <h5>Amenities</h5>
-                    <ul>
-                        @foreach (var a in Model.AmenityNames)
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img"
+         src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80" : Model.ImageUrl)"
+         alt="@Model.Name" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">@Model.Name</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Rooms" asp-action="Index">Rooms</a> &raquo; @Model.Name</p>
+        </div>
+    </section>
+
+    <!-- ROOM DETAILS -->
+    <section class="section fade-in">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.Name" />
+                    }
+                    <h2 class="mt-4" style="font-family: 'Playfair Display', serif;">@Model.Name</h2>
+                    <p class="text-muted">@Model.SizeSqFt sq.ft &bull; @Model.BedType &bull; @Model.ViewType &bull; Up to
+                        @Model.MaxGuests guests (@Model.MaxAdults adults, @Model.MaxChildren children)</p>
+                        <p>@Model.Description</p>
+                        @if (Model.AmenityNames.Any())
                         {
-                            <li>@a</li>
+                            <h5>Amenities</h5>
+                            <ul>
+                                @foreach (var a in Model.AmenityNames)
+                                {
+                                    <li>@a</li>
+                                }
+                            </ul>
                         }
-                    </ul>
-                }
-            </div>
-            <div class="col-md-5">
-                <div class="card shadow-sm">
-                    <div class="card-body p-4">
-                        <h4><strong class="price">₹@Model.PricePerNight.ToString("N0")</strong> <span
-                            class="text-muted small">/ night</span></h4>
-                            <p class="text-muted small">@Model.AvailableRooms room(s) available</p>
-                            <form method="get" asp-controller="Rooms" asp-action="Search">
-                                <div class="mb-3">
-                                    <label class="form-label" for="checkIn">Check-in</label>
-                                    <input class="form-control" type="date" id="checkIn" name="checkIn" value="@ViewBag.CheckIn"
-                                           required />
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card shadow-sm">
+                            <div class="card-body p-4">
+                                <h4><strong class="price">₹@Model.PricePerNight.ToString("N0")</strong> <span
+                                    class="text-muted small">/ night</span></h4>
+                                    <p class="text-muted small">@Model.AvailableRooms room(s) available</p>
+                                    <form method="get" asp-controller="Rooms" asp-action="Search">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="checkIn">Check-in</label>
+                                            <input class="form-control" type="date" id="checkIn" name="checkIn"
+                                                   value="@ViewBag.CheckIn" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="checkOut">Check-out</label>
+                                            <input class="form-control" type="date" id="checkOut" name="checkOut"
+                                                   value="@ViewBag.CheckOut" required />
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label" for="adults">Adults</label>
+                                                <input class="form-control" type="number" id="adults" name="adults"
+                                                       value="@ViewBag.Adults" min="1" max="10" required />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label" for="children">Children</label>
+                                                <input class="form-control" type="number" id="children" name="children"
+                                                       value="@ViewBag.Children" min="0" max="10" />
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-heritage w-100">Check Availability</button>
+                                    </form>
+                                    <p class="text-muted small mt-3 mb-0">Check-in 2:00 PM &bull; Check-out 11:00 AM</p>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="checkOut">Check-out</label>
-                                    <input class="form-control" type="date" id="checkOut" name="checkOut"
-                                           value="@ViewBag.CheckOut" required />
-                                </div>
-                                <div class="row">
-                                    <div class="col-6 mb-3">
-                                        <label class="form-label" for="adults">Adults</label>
-                                        <input class="form-control" type="number" id="adults" name="adults"
-                                               value="@ViewBag.Adults" min="1" max="10" required />
-                                    </div>
-                                    <div class="col-6 mb-3">
-                                        <label class="form-label" for="children">Children</label>
-                                        <input class="form-control" type="number" id="children" name="children"
-                                               value="@ViewBag.Children" min="0" max="10" />
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-heritage w-100">Check Availability</button>
-                            </form>
-                            <p class="text-muted small mt-3 mb-0">Check-in 2:00 PM &bull; Check-out 11:00 AM</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>

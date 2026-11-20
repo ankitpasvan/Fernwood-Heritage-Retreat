@@ -2,84 +2,85 @@
     ViewData["Title"] = "Dining - Fernwood Heritage Retreat";
 }
 
-<!-- PAGE HEADER -->
-<section class="section section-cream fade-in">
-    <div class="container text-center">
-        <p class="section-eyebrow">Dining</p>
-        <h1 class="section-title">Food that tastes like home.</h1>
-        <p class="text-muted">Homely food with fresh, local ingredients - breakfast on the terrace, slow dinners by the
-            fire, and a bakery and cafe with glass-floor seating and valley views.</p>
-        </div>
-    </section>
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80"
+         alt="Dining at Fernwood" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Dining</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; Dining</p>
+    </div>
+</section>
 
-    <!-- DINING DETAILS -->
-    <section class="section fade-in">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <img class="img-fluid rounded shadow img-zoom"
-                         src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80"
-                         alt="Dining at Fernwood" />
-                </div>
-                <div class="col-md-6 mt-4 mt-md-0">
-                    <p class="section-eyebrow">Our Kitchen</p>
-                    <h2 class="section-title">Slow food, fresh ingredients.</h2>
-                    <p>Our kitchen serves homely food with fresh, local ingredients. Breakfast on the terrace, slow dinners
-                        by the fire, and a bakery and cafe with glass-floor seating and valley views.</p>
-                        <ul class="list-check">
-                            <li>Breakfast on the terrace</li>
-                            <li>All-day cafe, bar and bakery</li>
-                            <li>Homely lunch and dinner, vegetarian and non-vegetarian</li>
-                            <li>In-room dining on request</li>
-                        </ul>
-                        <p class="text-muted small mb-0">Breakfast is chargeable unless it is mentioned in your booking plan or
-                            offer.</p>
-                        </div>
+<!-- DINING DETAILS -->
+<section class="section fade-in">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img class="img-fluid rounded shadow img-zoom"
+                     src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80"
+                     alt="Dining at Fernwood" />
+            </div>
+            <div class="col-md-6 mt-4 mt-md-0">
+                <p class="section-eyebrow">Our Kitchen</p>
+                <h2 class="section-title">Slow food, fresh ingredients.</h2>
+                <p>Our kitchen serves homely food with fresh, local ingredients. Breakfast on the terrace, slow dinners
+                    by the fire, and a bakery and cafe with glass-floor seating and valley views.</p>
+                    <ul class="list-check">
+                        <li>Breakfast on the terrace</li>
+                        <li>All-day cafe, bar and bakery</li>
+                        <li>Homely lunch and dinner, vegetarian and non-vegetarian</li>
+                        <li>In-room dining on request</li>
+                    </ul>
+                    <p class="text-muted small mb-0">Breakfast is chargeable unless it is mentioned in your booking plan or
+                        offer.</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- MEAL TIMINGS -->
-            <section class="section section-cream fade-in">
-                <div class="container">
-                    <p class="section-eyebrow text-center">Meal Timings</p>
-                    <h2 class="section-title text-center">When we serve.</h2>
-                    <div class="row">
-                        <div class="col-md-3 mb-4">
-                            <div class="card exp-card h-100">
-                                <div class="card-body">
-                                    <h5>Breakfast</h5>
-                                    <p class="text-muted">8:00 AM - 10:30 AM, served on the terrace.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <div class="card exp-card h-100">
-                                <div class="card-body">
-                                    <h5>Lunch</h5>
-                                    <p class="text-muted">12:30 PM - 3:00 PM, homely veg and non-veg.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <div class="card exp-card h-100">
-                                <div class="card-body">
-                                    <h5>Dinner</h5>
-                                    <p class="text-muted">7:30 PM - 10:00 PM, slow dinners by the fire.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-4">
-                            <div class="card exp-card h-100">
-                                <div class="card-body">
-                                    <h5>Cafe &amp; Bakery</h5>
-                                    <p class="text-muted">8:00 AM - 9:00 PM, all-day cafe, bar and bakery.</p>
-                                </div>
+        <!-- MEAL TIMINGS -->
+        <section class="section section-cream fade-in">
+            <div class="container">
+                <p class="section-eyebrow text-center">Meal Timings</p>
+                <h2 class="section-title text-center">When we serve.</h2>
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="card exp-card h-100">
+                            <div class="card-body">
+                                <h5>Breakfast</h5>
+                                <p class="text-muted">8:00 AM - 10:30 AM, served on the terrace.</p>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center mt-2">
-                        <a class="btn btn-heritage btn-lg" asp-controller="Rooms" asp-action="Search">Check Availability</a>
+                    <div class="col-md-3 mb-4">
+                        <div class="card exp-card h-100">
+                            <div class="card-body">
+                                <h5>Lunch</h5>
+                                <p class="text-muted">12:30 PM - 3:00 PM, homely veg and non-veg.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card exp-card h-100">
+                            <div class="card-body">
+                                <h5>Dinner</h5>
+                                <p class="text-muted">7:30 PM - 10:00 PM, slow dinners by the fire.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card exp-card h-100">
+                            <div class="card-body">
+                                <h5>Cafe &amp; Bakery</h5>
+                                <p class="text-muted">8:00 AM - 9:00 PM, all-day cafe, bar and bakery.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
+                <div class="text-center mt-2">
+                    <a class="btn btn-heritage btn-lg" asp-controller="Rooms" asp-action="Search">Check Availability</a>
+                </div>
+            </div>
+        </section>

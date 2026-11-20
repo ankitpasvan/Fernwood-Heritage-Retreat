@@ -2,89 +2,90 @@
     ViewData["Title"] = "About - Fernwood Heritage Retreat";
 }
 
-<!-- PAGE HEADER -->
-<section class="section section-cream fade-in">
-    <div class="container text-center">
-        <p class="section-eyebrow">Our Story</p>
-        <h1 class="section-title">A heritage home, not a hotel chain.</h1>
-        <p class="text-muted">Fernwood began as a quiet hill home with thick stone walls and wooden ceilings. Over the
-            years it became a small boutique stay - restored with care, never rebuilt as a modern hotel.</p>
-        </div>
-    </section>
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1920&q=80"
+         alt="Deluxe room at Fernwood" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">About Us</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; About Us</p>
+    </div>
+</section>
 
-    <!-- STORY -->
-    <section class="section fade-in">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p>Fernwood began as a quiet hill home with thick stone walls and wooden ceilings. Over the years it
-                        became a small boutique stay - restored with care, never rebuilt as a modern hotel. That is why
-                        every room is different, and every stay feels personal.</p>
-                        <p>Morning starts with tea on the terrace and the valley slowly opening up. Afternoons are for a short
-                            walk to the waterfall or coffee at our glass-floor cafe. Evenings belong to the bonfire, with the
-                            valley lights below.</p>
-                            <ul class="list-check">
-                                <li>Restored with care, never rebuilt as a modern hotel</li>
-                                <li>Every room is different - no two stays feel the same</li>
-                                <li>Homely food, valley views and bonfire evenings</li>
-                                <li>Only a few rooms, so every stay feels personal</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6 mt-4 mt-md-0">
-                            <img class="img-fluid rounded shadow img-zoom"
-                                 src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80"
-                                 alt="Fernwood Heritage Retreat exterior" />
-                            <div class="row mt-3">
-                                <div class="col-4">
-                                    <div class="stat-card"><strong>6</strong><span>Room Types</span></div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat-card"><strong>8</strong><span>Rooms</span></div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat-card"><strong>2:00 PM</strong><span>Check-in</span></div>
-                                </div>
+<!-- STORY -->
+<section class="section fade-in">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p>Fernwood began as a quiet hill home with thick stone walls and wooden ceilings. Over the years it
+                    became a small boutique stay - restored with care, never rebuilt as a modern hotel. That is why
+                    every room is different, and every stay feels personal.</p>
+                    <p>Morning starts with tea on the terrace and the valley slowly opening up. Afternoons are for a short
+                        walk to the waterfall or coffee at our glass-floor cafe. Evenings belong to the bonfire, with the
+                        valley lights below.</p>
+                        <ul class="list-check">
+                            <li>Restored with care, never rebuilt as a modern hotel</li>
+                            <li>Every room is different - no two stays feel the same</li>
+                            <li>Homely food, valley views and bonfire evenings</li>
+                            <li>Only a few rooms, so every stay feels personal</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 mt-4 mt-md-0">
+                        <img class="img-fluid rounded shadow img-zoom"
+                             src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80"
+                             alt="Fernwood Heritage Retreat exterior" />
+                        <div class="row mt-3">
+                            <div class="col-4">
+                                <div class="stat-card"><strong>6</strong><span>Room Types</span></div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-card"><strong>8</strong><span>Rooms</span></div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-card"><strong>2:00 PM</strong><span>Check-in</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- GETTING HERE -->
-            <section class="section section-cream fade-in">
-                <div class="container">
-                    <p class="section-eyebrow text-center">Getting Here</p>
-                    <h2 class="section-title text-center">Finding Fernwood.</h2>
-                    <div class="row">
-                        <div class="col-md-4 mb-4">
-                            <div class="card exp-card h-100">
-                                <div class="card-body">
-                                    <h5>By Air</h5>
-                                    <p class="text-muted">Jolly Grant Airport, Dehradun - approx. 60 km away.</p>
-                                </div>
+        <!-- GETTING HERE -->
+        <section class="section section-cream fade-in">
+            <div class="container">
+                <p class="section-eyebrow text-center">Getting Here</p>
+                <h2 class="section-title text-center">Finding Fernwood.</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card exp-card h-100">
+                            <div class="card-body">
+                                <h5>By Air</h5>
+                                <p class="text-muted">Jolly Grant Airport, Dehradun - approx. 60 km away.</p>
                             </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card exp-card h-100">
-                                <div class="card-body">
-                                    <h5>By Train</h5>
-                                    <p class="text-muted">Dehradun Railway Station - approx. 25 km away.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-4">
-                            <div class="card exp-card h-100">
-                                <div class="card-body">
-                                    <h5>Check-in &amp; Check-out</h5>
-                                    <p class="text-muted">Check-in is 2:00 PM and check-out is 11:00 AM. Early check-in or late
-                                        check-out is available on request.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-center mt-2">
-                            <a class="btn btn-heritage btn-lg me-2" asp-controller="Rooms" asp-action="Index">View Rooms</a>
-                            <a class="btn btn-outline-heritage btn-lg" asp-controller="Pages" asp-action="Contact">Contact Us</a>
                         </div>
                     </div>
-                </section>
+                    <div class="col-md-4 mb-4">
+                        <div class="card exp-card h-100">
+                            <div class="card-body">
+                                <h5>By Train</h5>
+                                <p class="text-muted">Dehradun Railway Station - approx. 25 km away.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card exp-card h-100">
+                            <div class="card-body">
+                                <h5>Check-in &amp; Check-out</h5>
+                                <p class="text-muted">Check-in is 2:00 PM and check-out is 11:00 AM. Early check-in or late
+                                    check-out is available on request.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-2">
+                        <a class="btn btn-heritage btn-lg me-2" asp-controller="Rooms" asp-action="Index">View Rooms</a>
+                        <a class="btn btn-outline-heritage btn-lg" asp-controller="Pages" asp-action="Contact">Contact Us</a>
+                    </div>
+                </div>
+            </section>

@@ -2,19 +2,22 @@
     ViewData["Title"] = "Experiences - Fernwood Heritage Retreat";
 }
 
-<!-- PAGE HEADER -->
-<section class="section section-cream fade-in">
-    <div class="container text-center">
-        <p class="section-eyebrow">Experiences</p>
-        <h1 class="section-title">Slow days, full hearts.</h1>
-        <p class="text-muted">Fernwood is not about rushing from one sight to another. It is about slow mornings, quiet
-            walks and evenings by the fire.</p>
-        </div>
-    </section>
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80"
+         alt="Mountain valley near Fernwood" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Experiences</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; Experiences</p>
+    </div>
+</section>
 
-    <!-- EXPERIENCES -->
-    <section class="section fade-in">
-        <div class="container">
+<!-- EXPERIENCES -->
+<section class="section fade-in">
+    <div class="container">
+        <p class="text-muted text-center mb-4">Fernwood is not about rushing from one sight to another. It is about slow
+            mornings, quiet walks and evenings by the fire.</p>
             <div class="row">
                 <div class="col-md-3 mb-4">
                     <div class="card exp-card h-100">
