@@ -1,0 +1,28 @@
+@model HotelBookingSystem.Models.Room
+@{
+    ViewData["Title"] = "Delete Room";
+    var bookingCount = (int)(ViewBag.BookingCount ?? 0);
+}
+<div class="container py-5" style="margin-top: 70px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 style="font-family: 'Playfair Display', serif;">Delete Room</h2>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            @if (bookingCount > 0)
+            {
+                <div class="alert alert-warning">This room has @bookingCount booking(s). It cannot be deleted. Set its
+                    status to OutOfService instead.</div>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                }
+            else
+                {
+                    <p>Are you sure you want to delete room <strong>@Model.RoomNumber</strong> (@Model.RoomType?.Name)?</p>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="RoomId" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>

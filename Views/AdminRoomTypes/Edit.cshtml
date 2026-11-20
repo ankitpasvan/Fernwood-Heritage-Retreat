@@ -1,0 +1,89 @@
+@model HotelBookingSystem.Models.RoomType
+@{
+    ViewData["Title"] = "Edit Room Type";
+    var amenities = ViewBag.Amenities as List<HotelBookingSystem.Models.Amenity> ?? new List<HotelBookingSystem.Models.Amenity>();
+    var selected = ViewBag.SelectedAmenities as List<int> ?? new List<int>();
+}
+<div class="container py-5" style="margin-top: 70px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 style="font-family: 'Playfair Display', serif;">Edit Room Type</h2>
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="RoomTypeId" />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PricePerNight" class="form-label"></label>
+                        <input asp-for="PricePerNight" class="form-control" type="number" step="0.01" min="0" />
+                        <span asp-validation-for="PricePerNight" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="SizeSqFt" class="form-label"></label>
+                        <input asp-for="SizeSqFt" class="form-control" type="number" min="0" />
+                        <span asp-validation-for="SizeSqFt" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="BedType" class="form-label"></label>
+                        <input asp-for="BedType" class="form-control" />
+                        <span asp-validation-for="BedType" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ViewType" class="form-label"></label>
+                        <input asp-for="ViewType" class="form-control" />
+                        <span asp-validation-for="ViewType" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="MaxAdults" class="form-label"></label>
+                        <input asp-for="MaxAdults" class="form-control" type="number" min="1" />
+                        <span asp-validation-for="MaxAdults" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="MaxChildren" class="form-label"></label>
+                        <input asp-for="MaxChildren" class="form-control" type="number" min="0" />
+                        <span asp-validation-for="MaxChildren" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label asp-for="MaxGuests" class="form-label"></label>
+                        <input asp-for="MaxGuests" class="form-control" type="number" min="1" />
+                        <span asp-validation-for="MaxGuests" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ImageUrl" class="form-label"></label>
+                    <input asp-for="ImageUrl" class="form-control" />
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Amenities</label>
+                    @foreach (var amenity in amenities)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="selectedAmenities" value="@amenity.AmenityId" @(selected.Contains(amenity.AmenityId) ? "checked" : "") />
+                            <label class="form-check-label">@amenity.Name</label>
+                        </div>
+                    }
+                </div>
+                <div class="form-check mb-3">
+                    <input asp-for="IsActive" class="form-check-input" />
+                    <label asp-for="IsActive" class="form-check-label"></label>
+                </div>
+                <button type="submit" class="btn btn-heritage">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+            </form>
+        </div>
+    </div>
+</div>

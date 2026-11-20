@@ -1,0 +1,67 @@
+@model HotelBookingSystem.Models.RoomType
+@{
+    ViewData["Title"] = "Room Type Details";
+    var amenities = ViewBag.AmenityNames as List<string> ?? new List<string>();
+}
+<div class="container py-5" style="margin-top: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif;">@Model.Name</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+        <dt class="col-sm-3">Price / Night</dt>
+        <dd class="col-sm-9">₹@Model.PricePerNight.ToString("N0")</dd>
+        <dt class="col-sm-3">Size</dt>
+        <dd class="col-sm-9">@Model.SizeSqFt sq.ft</dd>
+        <dt class="col-sm-3">Bed</dt>
+        <dd class="col-sm-9">@Model.BedType</dd>
+        <dt class="col-sm-3">View</dt>
+        <dd class="col-sm-9">@Model.ViewType</dd>
+        <dt class="col-sm-3">Capacity</dt>
+        <dd class="col-sm-9">@Model.MaxAdults adults, @Model.MaxChildren children, @Model.MaxGuests guests max</dd>
+        <dt class="col-sm-3">Active</dt>
+        <dd class="col-sm-9">@(Model.IsActive ? "Yes" : "No")</dd>
+        <dt class="col-sm-3">Image</dt>
+        <dd class="col-sm-9">@Model.ImageUrl</dd>
+    </dl>
+    <h5>Amenities</h5>
+    @if (amenities.Any())
+    {
+        <ul>
+            @foreach (var a in amenities)
+            {
+                <li>@a</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p class="text-muted">No amenities selected.</p>
+    }
+    <h5>Rooms of this type (@Model.Rooms.Count)</h5>
+    @if (Model.Rooms.Any())
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Room No.</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model.Rooms)
+                {
+                    <tr>
+                        <td>@room.RoomNumber</td>
+                        <td>@room.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No rooms yet.</p>
+    }
+    <a asp-action="Edit" asp-route-id="@Model.RoomTypeId" class="btn btn-heritage">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>

@@ -1,0 +1,32 @@
+@model HotelBookingSystem.Models.RoomType
+@{
+    ViewData["Title"] = "Delete Room Type";
+}
+<div class="container py-5" style="margin-top: 70px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 style="font-family: 'Playfair Display', serif;">Delete Room Type</h2>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            @if (Model.Rooms.Any())
+            {
+                <div class="alert alert-warning">This room type has @Model.Rooms.Count room(s). Delete the rooms first — it cannot be deleted now.</div>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+            }
+            else
+            {
+                <p>Are you sure you want to delete <strong>@Model.Name</strong>?</p>
+                <dl class="row">
+                    <dt class="col-sm-4">Price / Night</dt>
+                    <dd class="col-sm-8">₹@Model.PricePerNight.ToString("N0")</dd>
+                    <dt class="col-sm-4">Size</dt>
+                    <dd class="col-sm-8">@Model.SizeSqFt sq.ft</dd>
+                </dl>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="RoomTypeId" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+                </form>
+            }
+        </div>
+    </div>
+</div>

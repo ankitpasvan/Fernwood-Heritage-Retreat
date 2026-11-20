@@ -13,17 +13,24 @@
         <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
             <span class="nav-link">Hello, @User.Identity.Name</span>
         </li>
-        <li class="nav-item mt-2 mt-lg-0">
-            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
-                <button type="submit" class="btn btn-link nav-link">Logout</button>
-            </form>
-        </li>
-    }
-    else
-    {
-        <li class="nav-item ms-lg-2 mt-2 mt-lg-0"><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
-        </li>
-        <li class="nav-item mt-2 mt-lg-0"><a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
-        </li>
-    }
-</ul>
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item mt-2 mt-lg-0"><a class="nav-link" asp-controller="AdminRoomTypes" asp-action="Index">Room
+                Types</a></li>
+                <li class="nav-item mt-2 mt-lg-0"><a class="nav-link" asp-controller="AdminRooms" asp-action="Index">Rooms</a></li>
+            }
+            <li class="nav-item mt-2 mt-lg-0">
+                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-link nav-link">Logout</button>
+                </form>
+            </li>
+        }
+
+        else
+        {
+            <li class="nav-item ms-lg-2 mt-2 mt-lg-0"><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+            </li>
+            <li class="nav-item mt-2 mt-lg-0"><a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+            </li>
+        }
+    </ul>

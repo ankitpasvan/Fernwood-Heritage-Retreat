@@ -1,0 +1,43 @@
+@model IEnumerable<HotelBookingSystem.Models.RoomType>
+@{
+    ViewData["Title"] = "Room Types";
+}
+<div class="container py-5" style="margin-top: 70px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 style="font-family: 'Playfair Display', serif;">Room Types</h2>
+        <a asp-action="Create" class="btn btn-heritage">Add Room Type</a>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price / Night</th>
+                <th>Size</th>
+                <th>Bed</th>
+                <th>Max Guests</th>
+                <th>Rooms</th>
+                <th>Active</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>₹@item.PricePerNight.ToString("N0")</td>
+                    <td>@item.SizeSqFt sq.ft</td>
+                    <td>@item.BedType</td>
+                    <td>@item.MaxGuests</td>
+                    <td>@item.Rooms.Count</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.RoomTypeId">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@item.RoomTypeId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.RoomTypeId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
