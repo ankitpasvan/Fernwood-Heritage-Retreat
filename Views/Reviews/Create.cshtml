@@ -1,0 +1,92 @@
+@model HotelBookingSystem.ViewModels.ReviewCreateViewModel
+
+@{
+    ViewData["Title"] = "Write a Review";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=80"
+         alt="Write a review" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Write a Review</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Reviews" asp-action="MyReviews">My Reviews</a> &raquo; Write a Review</p>
+        </div>
+    </section>
+
+    <!-- REVIEW FORM -->
+    <section class="section fade-in">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Your stay</h5>
+                            <table class="table table-borderless mb-4">
+                                <tr>
+                                    <th style="width: 40%;">Booking</th>
+                                    <td><strong>@Model.BookingRef</strong></td>
+                                </tr>
+                                <tr>
+                                    <th>Room type</th>
+                                    <td>@Model.RoomTypeName</td>
+                                </tr>
+                                <tr>
+                                    <th>Dates</th>
+                                    <td>@Model.CheckInDate.ToString("dd MMM yyyy") - @Model.CheckOutDate.ToString("dd MMM yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <th>Guest</th>
+                                    <td>@Model.GuestName</td>
+                                </tr>
+                            </table>
+
+                            <form asp-controller="Reviews" asp-action="Create" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="BookingId" />
+
+                                <div class="mb-3">
+                                    <label class="form-label">Your rating</label>
+                                    <div>
+                                        @for (int i = 5; i >= 1; i--)
+                                        {
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" asp-for="Rating" value="@i"
+                                                       id="rating@i" />
+                                                <label class="form-check-label" for="rating@i">@i &#9733;</label>
+                                            </div>
+                                        }
+                                    </div>
+                                    <span asp-validation-for="Rating" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Title" class="form-label">Review title</label>
+                                    <input asp-for="Title" class="form-control"
+                                           placeholder="e.g. A peaceful stay above the valley" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Comment" class="form-label">Your experience (optional)</label>
+                                    <textarea asp-for="Comment" class="form-control" rows="5"
+                                              placeholder="Tell future guests what you liked about your stay..."></textarea>
+                                    <span asp-validation-for="Comment" class="text-danger"></span>
+                                </div>
+
+                                <button type="submit" class="btn btn-heritage w-100">Submit Review</button>
+                                <p class="text-muted small mt-2 mb-0">Your review will be published after admin approval.
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

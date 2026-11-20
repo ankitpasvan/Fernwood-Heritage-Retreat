@@ -1,0 +1,94 @@
+@model List<HotelBookingSystem.Models.Review>
+
+@{
+    ViewData["Title"] = "My Reviews";
+    var eligible = ViewBag.EligibleBookings as List<HotelBookingSystem.Models.Booking> ?? new
+List<HotelBookingSystem.Models.Booking>();
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=80"
+         alt="My reviews" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">My Reviews</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; My Reviews</p>
+    </div>
+</section>
+
+<!-- MY REVIEWS -->
+<section class="section fade-in">
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        <h4 class="mb-3">Stays you can review</h4>
+        @if (!eligible.Any())
+        {
+            <p class="text-muted">No completed stays are waiting for a review right now. A stay becomes reviewable after
+                check-out.</p>
+            }
+        else
+            {
+                <div class="row mb-5">
+                    @foreach (var b in eligible)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body p-4">
+                                    <h5 class="card-title">@b.BookingRef</h5>
+                                    <p class="mb-1">@(b.Room?.RoomType?.Name ?? "") - Room @(b.Room?.RoomNumber ?? "-")</p>
+                                    <p class="text-muted small mb-3">@b.CheckInDate.ToString("dd MMM yyyy") -
+                                        @b.CheckOutDate.ToString("dd MMM yyyy")</p>
+                                        <a class="btn btn-heritage btn-sm" asp-controller="Reviews" asp-action="Create"
+                                           asp-route-bookingId="@b.BookingId">Write Review</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                <h4 class="mb-3">Your reviews</h4>
+                @if (!Model.Any())
+                {
+                    <p class="text-muted">You have not submitted any reviews yet.</p>
+                }
+                else
+                {
+                    <div class="row">
+                        @foreach (var r in Model)
+                        {
+                            <div class="col-md-4 mb-4">
+                                <div class="card review-card shadow-sm h-100">
+                                    <div class="card-body p-4">
+                                        <p class="mb-2">
+                                            <span class="stars">@(new string('★', r.Rating))@(new string('☆', 5 - r.Rating))</span>
+                                            <span class="badge @(r.IsApproved ? "bg-success" : "bg-warning text-dark")">@(r.IsApproved ?
+                                                                        "Approved" : "Pending approval")</span>
+                                            </p>
+                                            <h5 class="card-title">@r.Title</h5>
+                                            <p class="card-text">@(r.Comment ?? "")</p>
+                                            <p class="text-muted small mb-3">@(r.RoomType?.Name ?? "") &middot; @r.CreatedAt.ToString("dd MMM yyyy")</p>
+                                            <a class="btn btn-outline-heritage btn-sm me-2" asp-controller="Reviews" asp-action="Edit"
+                                               asp-route-id="@r.ReviewId">Edit</a>
+                                            <form asp-controller="Reviews" asp-action="Delete" asp-route-id="@r.ReviewId" method="post"
+                                                  class="d-inline">
+                                                <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                        onclick="return confirm('Delete this review?');">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </section>

@@ -1,0 +1,102 @@
+@model List<HotelBookingSystem.Models.Review>
+
+@{
+    ViewData["Title"] = "Manage Reviews";
+    string? filter = ViewBag.Filter;
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=80"
+         alt="Manage reviews" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Manage Reviews</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a> &raquo; Reviews</p>
+        </div>
+    </section>
+
+    <!-- ADMIN REVIEWS -->
+    <section class="section fade-in">
+        <div class="container">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+
+            <div class="mb-4">
+                <a class="btn @(string.IsNullOrEmpty(filter) ? "btn-heritage" : "btn-outline-heritage") me-2"
+                   asp-controller="AdminReviews" asp-action="Index">All</a>
+                <a class="btn @(filter == "pending" ? "btn-heritage" : "btn-outline-heritage") me-2"
+                   asp-controller="AdminReviews" asp-action="Index" asp-route-filter="pending">Pending
+                    (@ViewBag.PendingCount)</a>
+                    <a class="btn @(filter == "approved" ? "btn-heritage" : "btn-outline-heritage")"
+                       asp-controller="AdminReviews" asp-action="Index" asp-route-filter="approved">Approved</a>
+                </div>
+
+                @if (!Model.Any())
+                {
+                    <p class="text-muted text-center">No reviews found for this filter.</p>
+                }
+                else
+                {
+                    <div class="card shadow-sm">
+                        <div class="card-body p-0">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Guest</th>
+                                        <th>Room Type</th>
+                                        <th>Rating</th>
+                                        <th>Review</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var r in Model)
+                                    {
+                                        <tr>
+                                            <td><strong>@(r.Booking?.User?.FullName ?? "-")</strong><br /><span
+                                                class="text-muted small">@(r.Booking?.BookingRef ?? "-")</span></td>
+                                                <td>@(r.RoomType?.Name ?? "-")</td>
+                                                <td><span class="stars">@(new string('★', r.Rating))@(new string('☆', 5 - r.Rating))</span>
+                                                </td>
+                                                <td><strong>@r.Title</strong><br /><span class="text-muted small">@(r.Comment ?? "")</span>
+                                                </td>
+                                                <td>@r.CreatedAt.ToString("dd MMM yyyy")</td>
+                                                <td><span
+                                                    class="badge @(r.IsApproved ? "bg-success" : "bg-warning text-dark")">@(r.IsApproved
+                                                    ? "Approved" : "Pending")</span></td>
+                                                    <td>
+                                                        @if (!r.IsApproved)
+                                                        {
+                                                            <form asp-controller="AdminReviews" asp-action="Approve" asp-route-id="@r.ReviewId"
+                                                                  asp-route-filter="@filter" method="post" class="d-inline">
+                                                                <button type="submit" class="btn btn-heritage btn-sm mb-1">Approve</button>
+                                                            </form>
+                                                        }
+                                                        else
+                                                        {
+                                                            <form asp-controller="AdminReviews" asp-action="Reject" asp-route-id="@r.ReviewId"
+                                                                  asp-route-filter="@filter" method="post" class="d-inline">
+                                                                <button type="submit" class="btn btn-outline-warning btn-sm mb-1">Hide</button>
+                                                            </form>
+                                                        }
+                                                        <form asp-controller="AdminReviews" asp-action="Delete" asp-route-id="@r.ReviewId"
+                                                              asp-route-filter="@filter" method="post" class="d-inline">
+                                                            <button type="submit" class="btn btn-outline-danger btn-sm mb-1"
+                                                                    onclick="return confirm('Delete this review permanently?');">Delete</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </section>

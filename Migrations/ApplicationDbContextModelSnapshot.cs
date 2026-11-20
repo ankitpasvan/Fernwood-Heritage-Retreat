@@ -340,6 +340,11 @@ namespace HotelBookingSystem.Migrations
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.HasKey("ReviewId");
 
                     b.HasIndex("BookingId")
