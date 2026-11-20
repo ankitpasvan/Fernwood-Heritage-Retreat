@@ -72,10 +72,25 @@
                                         </div>
                                         <button type="submit" class="btn btn-heritage w-100">Check Availability</button>
                                     </form>
-                                    <p class="text-muted small mt-3 mb-0">Check-in 2:00 PM &bull; Check-out 11:00 AM</p>
+                                    <hr />
+                                    @if (!string.IsNullOrEmpty(ViewBag.CheckIn) && !string.IsNullOrEmpty(ViewBag.CheckOut))
+                                    {
+                                        <a class="btn btn-heritage w-100" asp-controller="Bookings" asp-action="Create"
+                                           asp-route-roomTypeId="@Model.RoomTypeId" asp-route-checkIn="@ViewBag.CheckIn"
+                                           asp-route-checkOut="@ViewBag.CheckOut" asp-route-adults="@ViewBag.Adults"
+                                           asp-route-children="@ViewBag.Children">Book Now</a>
+                                        <p class="text-muted small mt-2 mb-0">Confirm on the next step. After confirming you will have
+                                            15 minutes to complete the demo payment.</p>
+                                        }
+                        else
+                                        {
+                                            <a class="btn btn-heritage w-100" asp-controller="Rooms" asp-action="Search">Select Dates to
+                                                Book</a>
+                                            }
+                                            <p class="text-muted small mt-3 mb-0">Check-in 2:00 PM &bull; Check-out 11:00 AM</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
+                    </section>

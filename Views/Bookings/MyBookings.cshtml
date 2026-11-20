@@ -1,0 +1,85 @@
+@model List<HotelBookingSystem.Models.Booking>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80"
+         alt="My bookings" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">My Bookings</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; My Bookings</p>
+    </div>
+</section>
+
+<!-- MY BOOKINGS -->
+<section class="section fade-in">
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="text-center">
+                <p class="text-muted">You have no bookings yet.</p>
+                <a class="btn btn-heritage btn-lg" asp-controller="Rooms" asp-action="Search">Search Rooms</a>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var b in Model)
+                {
+                    int nights = b.CheckOutDate.DayNumber - b.CheckInDate.DayNumber;
+                    string badgeClass = b.Status switch
+                    {
+                        "Confirmed" => "bg-success",
+                        "Pending" => "bg-warning text-dark",
+                        "Cancelled" => "bg-danger",
+                        "CheckedIn" => "bg-primary",
+                        "CheckedOut" => "bg-secondary",
+                        _ => "bg-secondary"
+                    };
+                    <div class="col-md-6 mb-4">
+                        <div class="card room-card h-100">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title d-flex justify-content-between align-items-center">
+                                    @b.BookingRef
+                                    <span class="badge @badgeClass">@b.Status</span>
+                                </h5>
+                                <p class="text-muted small mb-2">@(b.Room?.RoomType?.Name ?? "-") - Room @(b.Room?.RoomNumber ??
+                                                             "-")</p>
+                                    <p class="mb-1"><strong>@b.CheckInDate.ToString("dd MMM yyyy")</strong> to
+                                        <strong>@b.CheckOutDate.ToString("dd MMM yyyy")</strong> (@nights night(s))</p>
+                                        <p class="mb-1 text-muted small">@b.Guests guest(s) &bull; Booked on @b.CreatedAt.ToString("dd MMM yyyy")</p>
+                                        <p class="mb-2"><strong>₹@b.TotalAmount.ToString("N0")</strong></p>
+                                        @if (b.Status == "Pending" && b.PendingExpiresAt != null)
+                                        {
+                                            <p class="text-warning small mb-2">Pay before @b.PendingExpiresAt.Value.ToString("dd MMM yyyy, hh:mm tt") or it will be cancelled.</p>
+                                        }
+                                        <div class="mt-auto">
+                                            <a class="btn btn-heritage btn-sm" asp-controller="Bookings" asp-action="Details"
+                                               asp-route-id="@b.BookingId">View Details</a>
+                                            @if (b.Status == "Pending")
+                                            {
+                                                <a class="btn btn-outline-heritage btn-sm" asp-controller="Payments" asp-action="Create"
+                                                   asp-route-bookingId="@b.BookingId">Pay Now</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </section>

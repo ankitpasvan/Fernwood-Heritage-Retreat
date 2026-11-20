@@ -1,0 +1,110 @@
+@model HotelBookingSystem.ViewModels.PaymentCreateViewModel
+
+@{
+    ViewData["Title"] = "Demo Payment";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80"
+         alt="Demo payment" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Demo Payment</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Bookings" asp-action="MyBookings">My Bookings</a> &raquo; Payment</p>
+        </div>
+    </section>
+
+    <!-- DEMO PAYMENT -->
+    <section class="section fade-in">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7">
+                    <div class="alert alert-warning">
+                        <strong>Demo payment only.</strong> No real money is charged and no real payment is processed.
+                        Use any card number (for example <strong>4111 1111 1111 1111</strong>) or any UPI ID.
+                    </div>
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Pay for booking @Model.BookingRef</h5>
+                            <p class="d-flex justify-content-between mb-3"><span>Amount payable</span><strong
+                                class="price">₹@Model.Amount.ToString("N0")</strong></p>
+                                <form asp-controller="Payments" asp-action="Create" method="post">
+                                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                                    <input type="hidden" asp-for="BookingId" />
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Payment method</label><br />
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" asp-for="Method" value="Card"
+                                                   id="methodCard" />
+                                            <label class="form-check-label" for="methodCard">Card</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" asp-for="Method" value="UPI"
+                                                   id="methodUpi" />
+                                            <label class="form-check-label" for="methodUpi">UPI</label>
+                                        </div>
+                                    </div>
+
+                                    <div id="cardFields">
+                                        <div class="mb-3">
+                                            <label class="form-label" asp-for="CardNumber">Card number</label>
+                                            <input class="form-control" asp-for="CardNumber"
+                                                   placeholder="4111 1111 1111 1111" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" asp-for="CardName">Name on card</label>
+                                            <input class="form-control" asp-for="CardName"
+                                                   placeholder="Full name as on the card" />
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label" asp-for="Expiry">Expiry (MM/YY)</label>
+                                                <input class="form-control" asp-for="Expiry" placeholder="12/28" />
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label" asp-for="Cvv">CVV</label>
+                                                <input class="form-control" asp-for="Cvv" placeholder="123" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="upiFields" style="display: none;">
+                                        <div class="mb-3">
+                                            <label class="form-label" asp-for="UpiId">UPI ID</label>
+                                            <input class="form-control" asp-for="UpiId" placeholder="name@okhdfcbank" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" asp-for="SimulateFailure"
+                                               id="simulateFailure" />
+                                        <label class="form-check-label" for="simulateFailure">Simulate a failed payment (demo) -
+                                            the booking stays Pending so you can retry.</label>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-heritage w-100">Pay ₹@Model.Amount.ToString("N0")
+                                            (Demo)</button>
+                                        </form>
+                                        <a class="btn btn-outline-heritage w-100 mt-2" asp-controller="Bookings" asp-action="Details"
+                                           asp-route-id="@Model.BookingId">Back to Booking</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                @section Scripts {
+                    <script>
+                        function toggleMethod() {
+                            var method = document.querySelector('input[name="Method"]:checked').value;
+                            document.getElementById('cardFields').style.display = method === 'Card' ? 'block' : 'none';
+                            document.getElementById('upiFields').style.display = method === 'UPI' ? 'block' : 'none';
+                        }
+                        document.querySelectorAll('input[name="Method"]').forEach(function (r) { r.addEventListener('change', toggleMethod); });
+                        toggleMethod();
+                    </script>
+                }

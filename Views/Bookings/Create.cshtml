@@ -1,0 +1,88 @@
+@using System.Security.Claims
+@model HotelBookingSystem.ViewModels.BookingCreateViewModel
+
+@{
+    ViewData["Title"] = "Confirm Booking";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img"
+         src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80" : Model.ImageUrl)"
+         alt="@Model.RoomTypeName" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Confirm Booking</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Rooms" asp-action="Index">Rooms</a> &raquo; Confirm Booking</p>
+        </div>
+    </section>
+
+    <!-- CONFIRM BOOKING -->
+    <section class="section fade-in">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Your stay</h5>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                                    {
+                                        <img src="@Model.ImageUrl" class="img-fluid rounded" alt="@Model.RoomTypeName" />
+                                    }
+                                </div>
+                                <div class="col-md-7">
+                                    <h5 style="font-family: 'Playfair Display', serif;">@Model.RoomTypeName</h5>
+                                    <p class="text-muted small mb-1">Room @Model.RoomNumber &bull; @Model.SizeSqFt sq.ft
+                                        &bull; @Model.BedType &bull; @Model.ViewType</p>
+                                        <p class="mb-1"><strong>Check-in:</strong> @Model.CheckInDate.ToString("dd MMM yyyy")
+                                            (2:00 PM)</p>
+                                            <p class="mb-1"><strong>Check-out:</strong> @Model.CheckOutDate.ToString("dd MMM yyyy")
+                                                (11:00 AM)</p>
+                                                <p class="mb-1"><strong>Guests:</strong> @Model.Adults adult(s), @Model.Children
+                                                    children (@Model.Guests total)</p>
+                                                    <p class="mb-0"><strong>Nights:</strong> @Model.Nights</p>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <h5 class="card-title">Guest</h5>
+                                            <p class="mb-1"><strong>Name:</strong> @User.Identity?.Name</p>
+                                            <p class="mb-0"><strong>Email:</strong> @User.FindFirst(ClaimTypes.Email)?.Value</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body p-4">
+                                            <h5 class="card-title">Price summary</h5>
+                                            <p class="d-flex justify-content-between mb-1"><span>₹@Model.PricePerNight.ToString("N0")
+                                                &times; @Model.Nights night(s)</span><span>₹@Model.TotalAmount.ToString("N0")</span></p>
+                                                <p class="d-flex justify-content-between mb-1"><span>Taxes &amp; fees</span><span>₹0</span></p>
+                                                <hr />
+                                                <p class="d-flex justify-content-between"><strong>Total payable</strong><strong
+                                                    class="price">₹@Model.TotalAmount.ToString("N0")</strong></p>
+                                                    <form asp-controller="Bookings" asp-action="Create" method="post">
+                                                        <input type="hidden" asp-for="RoomTypeId" />
+                                                        <input type="hidden" asp-for="RoomId" />
+                                                        <input type="hidden" name="CheckInDate" value="@Model.CheckInDate.ToString("yyyy-MM-dd")" />
+                                                        <input type="hidden" name="CheckOutDate"
+                                                               value="@Model.CheckOutDate.ToString("yyyy-MM-dd")" />
+                                                        <input type="hidden" asp-for="Adults" />
+                                                        <input type="hidden" asp-for="Children" />
+                                                        <button type="submit" class="btn btn-heritage w-100">Confirm Booking</button>
+                                                    </form>
+                                                    <p class="text-muted small mt-3 mb-0">After confirming, you will have <strong>15
+                                                        minutes</strong> to complete the demo payment. If the payment is not completed in time,
+                                                        the booking is cancelled automatically and the room becomes free again.</p>
+                                                        <a class="btn btn-outline-heritage w-100 mt-2" asp-controller="Rooms" asp-action="Search"
+                                                           asp-route-checkIn="@Model.CheckInDate.ToString("yyyy-MM-dd")"
+                                                           asp-route-checkOut="@Model.CheckOutDate.ToString("yyyy-MM-dd")"
+                                                           asp-route-adults="@Model.Adults" asp-route-children="@Model.Children">Back to Search</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
