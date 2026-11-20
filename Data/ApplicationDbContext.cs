@@ -136,5 +136,83 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(r => r.RoomTypeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Seed data: HotelProfile (single row, Id = 1).
+        modelBuilder.Entity<HotelProfile>().HasData(
+            new HotelProfile
+            {
+                HotelProfileId = 1,
+                HotelName = "Fernwood Heritage Retreat",
+                Tagline = "A quiet heritage stay above the valley",
+                Address = "Fernwood Estate, Jharipani Road, Mussoorie Hills",
+                City = "Mussoorie",
+                State = "Uttarakhand",
+                Phone = "+91 98765 43210",
+                Email = "stay@fernwoodheritage.in",
+                Description = "A quiet heritage stay above the valley. Old stone walls, wooden ceilings, valley views, homely food and bonfire evenings.",
+                HeroImageUrl = "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80",
+                CheckInTime = new TimeOnly(14, 0),
+                CheckOutTime = new TimeOnly(11, 0)
+            });
+
+        // Seed data: Amenities.
+        modelBuilder.Entity<Amenity>().HasData(
+            new Amenity { AmenityId = 1, Name = "Free Wi-Fi", Icon = "wifi", Description = "Free high-speed Wi-Fi in rooms and common areas." },
+            new Amenity { AmenityId = 2, Name = "Valley View", Icon = "view", Description = "Rooms with direct valley views." },
+            new Amenity { AmenityId = 3, Name = "Private Terrace", Icon = "terrace", Description = "Private sit-out terrace with hill breeze." },
+            new Amenity { AmenityId = 4, Name = "Jacuzzi", Icon = "jacuzzi", Description = "Private jacuzzi in the premium suite." },
+            new Amenity { AmenityId = 5, Name = "In-Room Dining", Icon = "dining", Description = "Food served in your room on request." },
+            new Amenity { AmenityId = 6, Name = "Free Parking", Icon = "parking", Description = "Free secure parking inside the premises." },
+            new Amenity { AmenityId = 7, Name = "Bonfire", Icon = "bonfire", Description = "Evening bonfire on request, weather permitting." },
+            new Amenity { AmenityId = 8, Name = "Daily Housekeeping", Icon = "cleaning", Description = "Daily room cleaning and fresh linen." });
+
+        // Seed data: RoomTypes (same 6 types as the homepage).
+        modelBuilder.Entity<RoomType>().HasData(
+            new RoomType { RoomTypeId = 1, Name = "Semi Deluxe Room", Description = "Cozy double room with garden view, ideal for couples on a short stay.", PricePerNight = 2800, SizeSqFt = 140, BedType = "Double Bed", ViewType = "Garden View", MaxAdults = 2, MaxChildren = 0, MaxGuests = 2, ImageUrl = "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80", IsActive = true },
+            new RoomType { RoomTypeId = 2, Name = "Log Hut", Description = "Rustic wooden hut with a private terrace and hill breeze.", PricePerNight = 3200, SizeSqFt = 210, BedType = "Double Bed", ViewType = "Terrace", MaxAdults = 2, MaxChildren = 0, MaxGuests = 2, ImageUrl = "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80", IsActive = true },
+            new RoomType { RoomTypeId = 3, Name = "Deluxe Room", Description = "Spacious deluxe room with full valley view and a cozy sit-out.", PricePerNight = 4500, SizeSqFt = 380, BedType = "Double Bed", ViewType = "Valley View", MaxAdults = 2, MaxChildren = 1, MaxGuests = 3, ImageUrl = "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80", IsActive = true },
+            new RoomType { RoomTypeId = 4, Name = "Suite Room", Description = "Large suite with separate sitting area and valley view.", PricePerNight = 5200, SizeSqFt = 425, BedType = "Double Bed", ViewType = "Valley View", MaxAdults = 2, MaxChildren = 1, MaxGuests = 3, ImageUrl = "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80", IsActive = true },
+            new RoomType { RoomTypeId = 5, Name = "Family Suite", Description = "Family suite with a double bed and a sofa bed, best for families.", PricePerNight = 6800, SizeSqFt = 550, BedType = "Double + Sofa Bed", ViewType = "Valley View", MaxAdults = 3, MaxChildren = 2, MaxGuests = 4, ImageUrl = "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80", IsActive = true },
+            new RoomType { RoomTypeId = 6, Name = "Fern Suite with Jacuzzi", Description = "Our premium suite with a private jacuzzi and full glass view of the valley.", PricePerNight = 12500, SizeSqFt = 650, BedType = "King Bed", ViewType = "Valley View", MaxAdults = 2, MaxChildren = 0, MaxGuests = 2, ImageUrl = "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80", IsActive = true });
+
+        // Seed data: Rooms (8 rooms in the single hotel).
+        modelBuilder.Entity<Room>().HasData(
+            new Room { RoomId = 1, RoomNumber = "101", RoomTypeId = 1, Status = "Available" },
+            new Room { RoomId = 2, RoomNumber = "102", RoomTypeId = 1, Status = "Available" },
+            new Room { RoomId = 3, RoomNumber = "201", RoomTypeId = 2, Status = "Available" },
+            new Room { RoomId = 4, RoomNumber = "301", RoomTypeId = 3, Status = "Available" },
+            new Room { RoomId = 5, RoomNumber = "302", RoomTypeId = 3, Status = "Available" },
+            new Room { RoomId = 6, RoomNumber = "401", RoomTypeId = 4, Status = "Available" },
+            new Room { RoomId = 7, RoomNumber = "501", RoomTypeId = 5, Status = "Available" },
+            new Room { RoomId = 8, RoomNumber = "601", RoomTypeId = 6, Status = "Available" });
+
+        // Seed data: RoomTypeAmenity mappings.
+        modelBuilder.Entity<RoomTypeAmenity>().HasData(
+            new RoomTypeAmenity { RoomTypeId = 1, AmenityId = 1 },
+            new RoomTypeAmenity { RoomTypeId = 1, AmenityId = 5 },
+            new RoomTypeAmenity { RoomTypeId = 1, AmenityId = 8 },
+            new RoomTypeAmenity { RoomTypeId = 2, AmenityId = 1 },
+            new RoomTypeAmenity { RoomTypeId = 2, AmenityId = 3 },
+            new RoomTypeAmenity { RoomTypeId = 2, AmenityId = 5 },
+            new RoomTypeAmenity { RoomTypeId = 2, AmenityId = 8 },
+            new RoomTypeAmenity { RoomTypeId = 3, AmenityId = 1 },
+            new RoomTypeAmenity { RoomTypeId = 3, AmenityId = 2 },
+            new RoomTypeAmenity { RoomTypeId = 3, AmenityId = 5 },
+            new RoomTypeAmenity { RoomTypeId = 3, AmenityId = 8 },
+            new RoomTypeAmenity { RoomTypeId = 4, AmenityId = 1 },
+            new RoomTypeAmenity { RoomTypeId = 4, AmenityId = 2 },
+            new RoomTypeAmenity { RoomTypeId = 4, AmenityId = 5 },
+            new RoomTypeAmenity { RoomTypeId = 4, AmenityId = 8 },
+            new RoomTypeAmenity { RoomTypeId = 5, AmenityId = 1 },
+            new RoomTypeAmenity { RoomTypeId = 5, AmenityId = 2 },
+            new RoomTypeAmenity { RoomTypeId = 5, AmenityId = 5 },
+            new RoomTypeAmenity { RoomTypeId = 5, AmenityId = 8 },
+            new RoomTypeAmenity { RoomTypeId = 6, AmenityId = 1 },
+            new RoomTypeAmenity { RoomTypeId = 6, AmenityId = 2 },
+            new RoomTypeAmenity { RoomTypeId = 6, AmenityId = 3 },
+            new RoomTypeAmenity { RoomTypeId = 6, AmenityId = 4 },
+            new RoomTypeAmenity { RoomTypeId = 6, AmenityId = 5 },
+            new RoomTypeAmenity { RoomTypeId = 6, AmenityId = 7 },
+            new RoomTypeAmenity { RoomTypeId = 6, AmenityId = 8 });
     }
 }
