@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<HotelBookingSystem.ViewModels.RoomTypeCardViewModel>
+
+@{
     ViewData["Title"] = "Fernwood Heritage Retreat - Heritage Stay in Mussoorie Hills";
 }
 
@@ -23,13 +25,13 @@
     <!-- BOOKING BAR -->
     <section id="booking" class="booking-bar-section">
         <div class="container">
-            <form class="booking-bar card shadow" id="bookingForm">
+            <form class="booking-bar card shadow" id="bookingForm" method="get" asp-controller="Rooms" asp-action="Search">
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label" for="checkIn">Check-in</label>
                         <input class="form-control" type="date" id="checkIn" name="checkIn" required />
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label" for="checkOut">Check-out</label>
                         <input class="form-control" type="date" id="checkOut" name="checkOut" required />
                     </div>
@@ -49,6 +51,14 @@
                             <option value="2" selected>2 Adults</option>
                             <option value="3">3 Adults</option>
                             <option value="4">4 Adults</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="children">Children</label>
+                        <select class="form-select" id="children" name="children">
+                            <option value="0" selected>0 Children</option>
+                            <option value="1">1 Child</option>
+                            <option value="2">2 Children</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -84,348 +94,272 @@
                                      alt="Fernwood Heritage Retreat exterior" />
                                 <div class="row mt-3">
                                     <div class="col-4">
-                                        <div class="stat-card"><strong>6</strong><span>Room Types</span></div>
+                                        <div class="stat-card"><strong>@(Model?.Count ?? 0)</strong><span>Room Types</span></div>
                                     </div>
                                     <div class="col-4">
-                                        <div class="stat-card"><strong>8</strong><span>Rooms</span></div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat-card"><strong>4.8</strong><span>Guest Rating</span></div>
+                                        <div class="stat-card"><strong>@(Model?.Sum(r => r.AvailableRooms) ?? 0)</strong><span>Rooms
+                                            Available</span></div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="stat-card"><strong>@ViewBag.ReviewCount</strong><span>Guest Reviews</span></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <!-- ROOMS -->
-                <section class="section section-cream fade-in" id="rooms">
-                    <div class="container">
-                        <p class="section-eyebrow text-center">Rooms &amp; Suites</p>
-                        <h2 class="section-title text-center">Choose your room.</h2>
-                        <p class="text-center text-muted mb-4">Prices are per night. Breakfast is chargeable unless mentioned in your
-                            plan.</p>
-                            <div class="row">
-                                <div class="col-md-4 mb-4">
-                                    <div class="card room-card h-100">
-                                        <img src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80"
-                                             class="card-img-top" alt="Semi Deluxe Room" />
-                                        <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title">Semi Deluxe Room</h5>
-                                            <p class="text-muted small mb-2">140 sq.ft &bull; Double Bed &bull; Garden View &bull; Up to 2
-                                                guests</p>
-                                                <p class="card-text flex-grow-1">Cozy double room with garden view, ideal for couples on a short
-                                                    stay.</p>
-                                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                                        <div><strong class="price">₹2,800</strong><span class="text-muted small"> / night</span>
+                    <!-- ROOMS -->
+                    <section class="section section-cream fade-in" id="rooms">
+                        <div class="container">
+                            <p class="section-eyebrow text-center">Rooms &amp; Suites</p>
+                            <h2 class="section-title text-center">Choose your room.</h2>
+                            <p class="text-center text-muted mb-4">Prices are per night. Breakfast is chargeable unless mentioned in your
+                                plan.</p>
+                                <div class="row">
+                                    @if (Model != null && Model.Any())
+                                    {
+                                        @foreach (var room in Model)
+                                        {
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card room-card h-100">
+                                                    <img src="@(string.IsNullOrEmpty(room.ImageUrl) ? "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" : room.ImageUrl)"
+                                                         class="card-img-top" alt="@room.Name" />
+                                                    <div class="card-body d-flex flex-column">
+                                                        <h5 class="card-title">@room.Name</h5>
+                                                        <p class="text-muted small mb-2">@room.SizeSqFt sq.ft &bull; @room.BedType &bull; @room.ViewType
+                                                            &bull; Up to @room.MaxGuests guests</p>
+                                                            <p class="card-text flex-grow-1">@room.Description</p>
+                                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                                <div><strong class="price">₹@(room.PricePerNight.ToString("N0"))</strong><span
+                                                                    class="text-muted small"> / night</span></div>
+                                                                    <a class="btn btn-heritage btn-sm" asp-controller="Rooms" asp-action="Details"
+                                                                       asp-route-id="@room.RoomTypeId">View Details</a>
+                                                                </div>
+                                                                <p class="text-muted small mt-2 mb-0">@room.AvailableRooms room(s) available</p>
+                                                            </div>
                                                         </div>
-                                                        <a class="btn btn-heritage btn-sm" href="#booking">Book Now</a>
                                                     </div>
+                                                }
+                                            }
+            else
+                                            {
+                                                <p class="text-center text-muted">No rooms available right now. Please check back soon.</p>
+                                            }
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- DINING -->
+                                <section class="section fade-in" id="dining">
+                                    <div class="container">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6 order-md-2">
+                                                <p class="section-eyebrow">Dining</p>
+                                                <h2 class="section-title">Food that tastes<br />like home.</h2>
+                                                <p>Our kitchen serves homely food with fresh, local ingredients - breakfast on the terrace, slow dinners
+                                                    by the fire, and a bakery and cafe with glass-floor seating and valley views.</p>
+                                                    <ul class="list-check">
+                                                        <li>Breakfast on the terrace</li>
+                                                        <li>All-day cafe, bar and bakery</li>
+                                                        <li>Homely lunch and dinner, vegetarian and non-vegetarian</li>
+                                                        <li>In-room dining on request</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-md-6 order-md-1 mt-4 mt-md-0">
+                                                    <img class="img-fluid rounded shadow img-zoom"
+                                                         src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80"
+                                                         alt="Dining at Fernwood" />
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="card room-card h-100">
-                                                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80"
-                                                     class="card-img-top" alt="Log Hut" />
-                                                <div class="card-body d-flex flex-column">
-                                                    <h5 class="card-title">Log Hut</h5>
-                                                    <p class="text-muted small mb-2">210 sq.ft &bull; Double Bed &bull; Terrace &bull; Up to 2
-                                                        guests</p>
-                                                        <p class="card-text flex-grow-1">Rustic wooden hut with a private terrace and hill breeze.</p>
-                                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                                            <div><strong class="price">₹3,200</strong><span class="text-muted small"> / night</span>
+                                    </section>
+
+                                    <!-- EXPERIENCES -->
+                                    <section class="section section-cream fade-in" id="experiences">
+                                        <div class="container">
+                                            <p class="section-eyebrow text-center">Experiences</p>
+                                            <h2 class="section-title text-center">Slow days, full hearts.</h2>
+                                            <div class="row">
+                                                <div class="col-md-3 mb-4">
+                                                    <div class="card exp-card h-100">
+                                                        <div class="card-body">
+                                                            <h5>Bonfire Evenings</h5>
+                                                            <p class="text-muted">Evening bonfire with valley lights below, on request and weather
+                                                                permitting.</p>
                                                             </div>
-                                                            <a class="btn btn-heritage btn-sm" href="#booking">Book Now</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 mb-4">
+                                                        <div class="card exp-card h-100">
+                                                            <div class="card-body">
+                                                                <h5>Nature Walk</h5>
+                                                                <p class="text-muted">Guided morning walk to the waterfall and nearby trails through oak and
+                                                                    deodar.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 mb-4">
+                                                            <div class="card exp-card h-100">
+                                                                <div class="card-body">
+                                                                    <h5>Yoga &amp; Terrace Breakfast</h5>
+                                                                    <p class="text-muted">Start the day with gentle yoga and breakfast on the terrace.</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 mb-4">
+                                                            <div class="card exp-card h-100">
+                                                                <div class="card-body">
+                                                                    <h5>Library &amp; Indoor Games</h5>
+                                                                    <p class="text-muted">Cozy sit-outs, books, board games and quiet corners for slow afternoons.
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 mb-4">
-                                                <div class="card room-card h-100">
-                                                    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
-                                                         class="card-img-top" alt="Deluxe Room" />
-                                                    <div class="card-body d-flex flex-column">
-                                                        <h5 class="card-title">Deluxe Room</h5>
-                                                        <p class="text-muted small mb-2">380 sq.ft &bull; Double Bed &bull; Valley View &bull; Up to 3
-                                                            guests</p>
-                                                            <p class="card-text flex-grow-1">Spacious deluxe room with full valley view and a cozy sit-out.
-                                                            </p>
-                                                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                                                <div><strong class="price">₹4,500</strong><span class="text-muted small"> / night</span>
-                                                                </div>
-                                                                <a class="btn btn-heritage btn-sm" href="#booking">Book Now</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4 mb-4">
-                                                    <div class="card room-card h-100">
-                                                        <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&q=80"
-                                                             class="card-img-top" alt="Suite Room" />
-                                                        <div class="card-body d-flex flex-column">
-                                                            <h5 class="card-title">Suite Room</h5>
-                                                            <p class="text-muted small mb-2">425 sq.ft &bull; Double Bed &bull; Valley View &bull; Up to 3
-                                                                guests</p>
-                                                                <p class="card-text flex-grow-1">Large suite with separate sitting area and valley view.</p>
-                                                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                                                    <div><strong class="price">₹5,200</strong><span class="text-muted small"> / night</span>
+                                            </section>
+
+                                            <!-- GALLERY -->
+                                            <section class="section fade-in" id="gallery">
+                                                <div class="container">
+                                                    <p class="section-eyebrow text-center">Gallery</p>
+                                                    <h2 class="section-title text-center">A look around Fernwood.</h2>
+                                                    <div class="row g-3">
+                                                        <div class="col-md-4"><img class="img-fluid rounded gallery-img"
+                                                                                       src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+                                                                                       alt="Hotel exterior" /></div>
+                                                            <div class="col-md-4"><img class="img-fluid rounded gallery-img"
+                                                                                           src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" alt="Room" /></div>
+                                                                <div class="col-md-4"><img class="img-fluid rounded gallery-img"
+                                                                                               src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Dining" /></div>
+                                                                    <div class="col-md-4"><img class="img-fluid rounded gallery-img"
+                                                                                                   src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Valley view" />
                                                                     </div>
-                                                                    <a class="btn btn-heritage btn-sm" href="#booking">Book Now</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 mb-4">
-                                                        <div class="card room-card h-100">
-                                                            <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80"
-                                                                 class="card-img-top" alt="Family Suite" />
-                                                            <div class="card-body d-flex flex-column">
-                                                                <h5 class="card-title">Family Suite</h5>
-                                                                <p class="text-muted small mb-2">550 sq.ft &bull; Double + Sofa Bed &bull; Valley View &bull; Up
-                                                                    to 4 guests</p>
-                                                                    <p class="card-text flex-grow-1">Family suite with a double bed and a sofa bed, best for
-                                                                        families.</p>
-                                                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                                                            <div><strong class="price">₹6,800</strong><span class="text-muted small"> / night</span>
-                                                                            </div>
-                                                                            <a class="btn btn-heritage btn-sm" href="#booking">Book Now</a>
-                                                                        </div>
+                                                                    <div class="col-md-4"><img class="img-fluid rounded gallery-img"
+                                                                                                   src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80" alt="Deluxe room" />
+                                                                    </div>
+                                                                    <div class="col-md-4"><img class="img-fluid rounded gallery-img"
+                                                                                                   src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80" alt="Suite" /></div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-4 mb-4">
-                                                                <div class="card room-card h-100">
-                                                                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80"
-                                                                         class="card-img-top" alt="Fern Suite with Jacuzzi" />
-                                                                    <div class="card-body d-flex flex-column">
-                                                                        <h5 class="card-title">Fern Suite with Jacuzzi</h5>
-                                                                        <p class="text-muted small mb-2">650 sq.ft &bull; King Bed &bull; Valley View &bull; Up to 2
-                                                                            guests</p>
-                                                                            <p class="card-text flex-grow-1">Our premium suite with a private jacuzzi and full glass view of
-                                                                                the valley.</p>
-                                                                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                                                                    <div><strong class="price">₹12,500</strong><span class="text-muted small"> / night</span>
-                                                                                    </div>
-                                                                                    <a class="btn btn-heritage btn-sm" href="#booking">Book Now</a>
+                                                            </section>
+
+                                                            <!-- TESTIMONIALS -->
+                                                            <section class="section section-cream fade-in">
+                                                                <div class="container">
+                                                                    <p class="section-eyebrow text-center">Guest Reviews</p>
+                                                                    <h2 class="section-title text-center">What guests say.</h2>
+                                                                    <div class="row">
+                                                                        <div class="col-md-4 mb-4">
+                                                                            <div class="card review-card h-100">
+                                                                                <div class="card-body">
+                                                                                    <p class="stars">★★★★★</p>
+                                                                                    <p>"Peaceful, clean and the valley view from our room was unforgettable. Food felt homely."</p>
+                                                                                    <p class="text-muted small mb-0">- Priya S., Delhi</p>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </section>
-
-                                                        <!-- DINING -->
-                                                        <section class="section fade-in" id="dining">
-                                                            <div class="container">
-                                                                <div class="row align-items-center">
-                                                                    <div class="col-md-6 order-md-2">
-                                                                        <p class="section-eyebrow">Dining</p>
-                                                                        <h2 class="section-title">Food that tastes<br />like home.</h2>
-                                                                        <p>Our kitchen serves homely food with fresh, local ingredients - breakfast on the terrace, slow dinners
-                                                                            by the fire, and a bakery and cafe with glass-floor seating and valley views.</p>
-                                                                            <ul class="list-check">
-                                                                                <li>Breakfast on the terrace</li>
-                                                                                <li>All-day cafe, bar and bakery</li>
-                                                                                <li>Homely lunch and dinner, vegetarian and non-vegetarian</li>
-                                                                                <li>In-room dining on request</li>
-                                                                            </ul>
+                                                                        <div class="col-md-4 mb-4">
+                                                                            <div class="card review-card h-100">
+                                                                                <div class="card-body">
+                                                                                    <p class="stars">★★★★★</p>
+                                                                                    <p>"Best part was the bonfire evening and the staff. They helped us plan the waterfall walk."
+                                                                                    </p>
+                                                                                    <p class="text-muted small mb-0">- Rahul M., Jaipur</p>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-md-6 order-md-1 mt-4 mt-md-0">
-                                                                            <img class="img-fluid rounded shadow img-zoom"
-                                                                                 src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80"
-                                                                                 alt="Dining at Fernwood" />
+                                                                        <div class="col-md-4 mb-4">
+                                                                            <div class="card review-card h-100">
+                                                                                <div class="card-body">
+                                                                                    <p class="stars">★★★★★</p>
+                                                                                    <p>"Quiet place away from Mall Road rush. Room was cozy and the terrace breakfast was lovely."
+                                                                                    </p>
+                                                                                    <p class="text-muted small mb-0">- Ananya K., Lucknow</p>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </section>
 
-                                                            <!-- EXPERIENCES -->
-                                                            <section class="section section-cream fade-in" id="experiences">
+                                                            <!-- FAQ -->
+                                                            <section class="section fade-in" id="faq">
                                                                 <div class="container">
-                                                                    <p class="section-eyebrow text-center">Experiences</p>
-                                                                    <h2 class="section-title text-center">Slow days, full hearts.</h2>
-                                                                    <div class="row">
-                                                                        <div class="col-md-3 mb-4">
-                                                                            <div class="card exp-card h-100">
-                                                                                <div class="card-body">
-                                                                                    <h5>Bonfire Evenings</h5>
-                                                                                    <p class="text-muted">Evening bonfire with valley lights below, on request and weather
-                                                                                        permitting.</p>
+                                                                    <p class="section-eyebrow text-center">FAQ</p>
+                                                                    <h2 class="section-title text-center">Good to know.</h2>
+                                                                    <div class="accordion" id="faqAccordion">
+                                                                        <div class="accordion-item">
+                                                                            <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                                                                                     data-bs-target="#faq1">What are check-in and check-out times?</button></h2>
+                                                                                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                                                                    <div class="accordion-body">Check-in is 2:00 PM and check-out is 11:00 AM. Early check-in or late
+                                                                                        check-out is available on request.</div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="col-md-3 mb-4">
-                                                                                <div class="card exp-card h-100">
-                                                                                    <div class="card-body">
-                                                                                        <h5>Nature Walk</h5>
-                                                                                        <p class="text-muted">Guided morning walk to the waterfall and nearby trails through oak and
-                                                                                            deodar.</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-3 mb-4">
-                                                                                    <div class="card exp-card h-100">
-                                                                                        <div class="card-body">
-                                                                                            <h5>Yoga &amp; Terrace Breakfast</h5>
-                                                                                            <p class="text-muted">Start the day with gentle yoga and breakfast on the terrace.</p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-md-3 mb-4">
-                                                                                    <div class="card exp-card h-100">
-                                                                                        <div class="card-body">
-                                                                                            <h5>Library &amp; Indoor Games</h5>
-                                                                                            <p class="text-muted">Cozy sit-outs, books, board games and quiet corners for slow afternoons.
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </section>
-
-                                                                    <!-- GALLERY -->
-                                                                    <section class="section fade-in" id="gallery">
-                                                                        <div class="container">
-                                                                            <p class="section-eyebrow text-center">Gallery</p>
-                                                                            <h2 class="section-title text-center">A look around Fernwood.</h2>
-                                                                            <div class="row g-3">
-                                                                                <div class="col-md-4"><img class="img-fluid rounded gallery-img"
-                                                                                                               src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
-                                                                                                               alt="Hotel exterior" /></div>
-                                                                                    <div class="col-md-4"><img class="img-fluid rounded gallery-img"
-                                                                                                                   src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" alt="Room" /></div>
-                                                                                        <div class="col-md-4"><img class="img-fluid rounded gallery-img"
-                                                                                                                       src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Dining" /></div>
-                                                                                            <div class="col-md-4"><img class="img-fluid rounded gallery-img"
-                                                                                                                           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Valley view" />
-                                                                                            </div>
-                                                                                            <div class="col-md-4"><img class="img-fluid rounded gallery-img"
-                                                                                                                           src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80" alt="Deluxe room" />
-                                                                                            </div>
-                                                                                            <div class="col-md-4"><img class="img-fluid rounded gallery-img"
-                                                                                                                           src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80" alt="Suite" /></div>
+                                                                                <div class="accordion-item">
+                                                                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
+                                                                                                                             data-bs-toggle="collapse" data-bs-target="#faq2">Is breakfast included?</button></h2>
+                                                                                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                                                                            <div class="accordion-body">Breakfast is chargeable unless it is mentioned in your booking plan or
+                                                                                                offer.</div>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </section>
-
-                                                                                    <!-- TESTIMONIALS -->
-                                                                                    <section class="section section-cream fade-in">
-                                                                                        <div class="container">
-                                                                                            <p class="section-eyebrow text-center">Guest Reviews</p>
-                                                                                            <h2 class="section-title text-center">What guests say.</h2>
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-4 mb-4">
-                                                                                                    <div class="card review-card h-100">
-                                                                                                        <div class="card-body">
-                                                                                                            <p class="stars">★★★★★</p>
-                                                                                                            <p>"Peaceful, clean and the valley view from our room was unforgettable. Food felt homely."</p>
-                                                                                                            <p class="text-muted small mb-0">- Priya S., Delhi</p>
-                                                                                                        </div>
+                                                                                        <div class="accordion-item">
+                                                                                            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
+                                                                                                                                     data-bs-toggle="collapse" data-bs-target="#faq3">Is Wi-Fi and parking available?</button></h2>
+                                                                                                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                                                                                    <div class="accordion-body">Yes. Free Wi-Fi is available in rooms and common areas. Free secure
+                                                                                                        parking is available inside the premises.</div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div class="col-md-4 mb-4">
-                                                                                                    <div class="card review-card h-100">
-                                                                                                        <div class="card-body">
-                                                                                                            <p class="stars">★★★★★</p>
-                                                                                                            <p>"Best part was the bonfire evening and the staff. They helped us plan the waterfall walk."
-                                                                                                            </p>
-                                                                                                            <p class="text-muted small mb-0">- Rahul M., Jaipur</p>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-md-4 mb-4">
-                                                                                                    <div class="card review-card h-100">
-                                                                                                        <div class="card-body">
-                                                                                                            <p class="stars">★★★★★</p>
-                                                                                                            <p>"Quiet place away from Mall Road rush. Room was cozy and the terrace breakfast was lovely."
-                                                                                                            </p>
-                                                                                                            <p class="text-muted small mb-0">- Ananya K., Lucknow</p>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </section>
-
-                                                                                    <!-- FAQ -->
-                                                                                    <section class="section fade-in" id="faq">
-                                                                                        <div class="container">
-                                                                                            <p class="section-eyebrow text-center">FAQ</p>
-                                                                                            <h2 class="section-title text-center">Good to know.</h2>
-                                                                                            <div class="accordion" id="faqAccordion">
                                                                                                 <div class="accordion-item">
-                                                                                                    <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                                                                                                             data-bs-target="#faq1">What are check-in and check-out times?</button></h2>
-                                                                                                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                                                                                                            <div class="accordion-body">Check-in is 2:00 PM and check-out is 11:00 AM. Early check-in or late
-                                                                                                                check-out is available on request.</div>
+                                                                                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
+                                                                                                                                             data-bs-toggle="collapse" data-bs-target="#faq4">Do you arrange bonfires?</button></h2>
+                                                                                                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                                                                                            <div class="accordion-body">Yes, bonfires can be arranged at an additional charge, subject to
+                                                                                                                weather conditions.</div>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="accordion-item">
                                                                                                             <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
-                                                                                                                                                     data-bs-toggle="collapse" data-bs-target="#faq2">Is breakfast included?</button></h2>
-                                                                                                                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                                                                                                    <div class="accordion-body">Breakfast is chargeable unless it is mentioned in your booking plan or
-                                                                                                                        offer.</div>
-                                                                                                                    </div>
+                                                                                                                                                     data-bs-toggle="collapse" data-bs-target="#faq5">Is the hotel suitable for families?</button>
+                                                                                                            </h2>
+                                                                                                            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                                                                                                <div class="accordion-body">Yes. Family Suite is best for families, and there is a children's play
+                                                                                                                    area and in-room dining.</div>
                                                                                                                 </div>
-                                                                                                                <div class="accordion-item">
-                                                                                                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
-                                                                                                                                                             data-bs-toggle="collapse" data-bs-target="#faq3">Is Wi-Fi and parking available?</button></h2>
-                                                                                                                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                                                                                                            <div class="accordion-body">Yes. Free Wi-Fi is available in rooms and common areas. Free secure
-                                                                                                                                parking is available inside the premises.</div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </section>
+
+                                                                                                <!-- CONTACT -->
+                                                                                                <section class="section section-cream fade-in" id="contact">
+                                                                                                    <div class="container">
+                                                                                                        <div class="row">
+                                                                                                            <div class="col-md-6">
+                                                                                                                <p class="section-eyebrow">Contact</p>
+                                                                                                                <h2 class="section-title">Talk to us.</h2>
+                                                                                                                <p class="text-muted">Fernwood Estate, Jharipani Road, Mussoorie Hills, Uttarakhand</p>
+                                                                                                                <p class="text-muted mb-1">Phone: +91 98765 43210</p>
+                                                                                                                <p class="text-muted mb-1">Email: stay@fernwoodheritage.in</p>
+                                                                                                                <p class="text-muted">For bookings, call us or use the booking bar above. We reply the same day.</p>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-6">
+                                                                                                                <form id="contactForm" class="card p-4 shadow-sm">
+                                                                                                                    <div class="mb-3"><label class="form-label" for="contactName">Name</label><input
+                                                                                                                        class="form-control" type="text" id="contactName" required /></div>
+                                                                                                                        <div class="mb-3"><label class="form-label" for="contactEmail">Email</label><input
+                                                                                                                            class="form-control" type="email" id="contactEmail" required /></div>
+                                                                                                                            <div class="mb-3"><label class="form-label" for="contactMessage">Message</label><textarea
+                                                                                                                                class="form-control" id="contactMessage" rows="4" required></textarea></div>
+                                                                                                                                <button class="btn btn-heritage" type="submit">Send Message</button>
+                                                                                                                                <p id="contactSuccess" class="text-success small mt-2 mb-0" style="display:none;">Thank you! Your
+                                                                                                                                    message has been received. We will reply soon.</p>
+                                                                                                                                </form>
                                                                                                                             </div>
                                                                                                                         </div>
-                                                                                                                        <div class="accordion-item">
-                                                                                                                            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
-                                                                                                                                                                     data-bs-toggle="collapse" data-bs-target="#faq4">Do you arrange bonfires?</button></h2>
-                                                                                                                                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                                                                                                                    <div class="accordion-body">Yes, bonfires can be arranged at an additional charge, subject to
-                                                                                                                                        weather conditions.</div>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="accordion-item">
-                                                                                                                                    <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
-                                                                                                                                                                             data-bs-toggle="collapse" data-bs-target="#faq5">Is the hotel suitable for families?</button>
-                                                                                                                                    </h2>
-                                                                                                                                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                                                                                                                        <div class="accordion-body">Yes. Family Suite is best for families, and there is a children's play
-                                                                                                                                            area and in-room dining.</div>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </section>
-
-                                                                                                                        <!-- CONTACT -->
-                                                                                                                        <section class="section section-cream fade-in" id="contact">
-                                                                                                                            <div class="container">
-                                                                                                                                <div class="row">
-                                                                                                                                    <div class="col-md-6">
-                                                                                                                                        <p class="section-eyebrow">Contact</p>
-                                                                                                                                        <h2 class="section-title">Talk to us.</h2>
-                                                                                                                                        <p class="text-muted">Fernwood Estate, Jharipani Road, Mussoorie Hills, Uttarakhand</p>
-                                                                                                                                        <p class="text-muted mb-1">Phone: +91 98765 43210</p>
-                                                                                                                                        <p class="text-muted mb-1">Email: stay@fernwoodheritage.in</p>
-                                                                                                                                        <p class="text-muted">For bookings, call us or use the booking bar above. We reply the same day.</p>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-md-6">
-                                                                                                                                        <form id="contactForm" class="card p-4 shadow-sm">
-                                                                                                                                            <div class="mb-3"><label class="form-label" for="contactName">Name</label><input
-                                                                                                                                                class="form-control" type="text" id="contactName" required /></div>
-                                                                                                                                                <div class="mb-3"><label class="form-label" for="contactEmail">Email</label><input
-                                                                                                                                                    class="form-control" type="email" id="contactEmail" required /></div>
-                                                                                                                                                    <div class="mb-3"><label class="form-label" for="contactMessage">Message</label><textarea
-                                                                                                                                                        class="form-control" id="contactMessage" rows="4" required></textarea></div>
-                                                                                                                                                        <button class="btn btn-heritage" type="submit">Send Message</button>
-                                                                                                                                                        <p id="contactSuccess" class="text-success small mt-2 mb-0" style="display:none;">Thank you! Your
-                                                                                                                                                            message has been received. We will reply soon.</p>
-                                                                                                                                                        </form>
-                                                                                                                                                    </div>
-                                                                                                                                                </div>
-                                                                                                                                            </div>
-                                                                                                                                        </section>
+                                                                                                                    </div>
+                                                                                                                </section>

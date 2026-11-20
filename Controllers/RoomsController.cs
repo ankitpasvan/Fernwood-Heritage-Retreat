@@ -21,26 +21,34 @@ public class RoomsController : Controller
             .Where(rt => rt.IsActive)
             .OrderBy(rt => rt.PricePerNight)
             .ToListAsync();
+
         var cards = await BuildCardsAsync(types, null, null);
+
         return View(cards);
     }
 
     public async Task<IActionResult> Details(int? id, DateOnly? checkIn, DateOnly? checkOut, int adults = 2, int children = 0)
     {
         if (id == null) return NotFound();
+
         var type = await _context.RoomTypes.FirstOrDefaultAsync(rt => rt.RoomTypeId == id && rt.IsActive);
+
         if (type == null) return NotFound();
+
         var cards = await BuildCardsAsync(new List<RoomType> { type }, checkIn, checkOut);
+
         ViewBag.CheckIn = checkIn?.ToString("yyyy-MM-dd");
         ViewBag.CheckOut = checkOut?.ToString("yyyy-MM-dd");
         ViewBag.Adults = adults;
         ViewBag.Children = children;
+
         return View(cards[0]);
     }
 
     public async Task<IActionResult> Search(DateOnly? checkIn, DateOnly? checkOut, int adults = 2, int children = 0, int guests = 0)
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
+
         var model = new RoomSearchViewModel
         {
             CheckInDate = checkIn ?? today,
@@ -63,13 +71,30 @@ public class RoomsController : Controller
         {
             ModelState.AddModelError("CheckInDate", "Check-in date cannot be in the past.");
         }
+
         if (model.CheckOutDate <= model.CheckInDate)
         {
             ModelState.AddModelError("CheckOutDate", "Check-out date must be after check-in date.");
         }
+
         if (model.Adults < 1)
         {
             ModelState.AddModelError("Adults", "At least 1 adult is required.");
+        }
+
+        if (model.Children < 0)
+        {
+            ModelState.AddModelError("Children", "Children count cannot be negative.");
+        }
+
+        if (model.Adults > 10)
+        {
+            ModelState.AddModelError("Adults", "Adults cannot be more than 10.");
+        }
+
+        if (model.Children > 10)
+        {
+            ModelState.AddModelError("Children", "Children cannot be more than 10.");
         }
 
         if (!ModelState.IsValid)
@@ -88,7 +113,9 @@ public class RoomsController : Controller
             .ToListAsync();
 
         var cards = await BuildCardsAsync(types, model.CheckInDate, model.CheckOutDate);
+
         model.Results = cards.Where(c => c.AvailableRooms > 0).ToList();
+
         return View(model);
     }
 
@@ -96,6 +123,7 @@ public class RoomsController : Controller
         List<RoomType> types, DateOnly? checkIn, DateOnly? checkOut)
     {
         var now = DateTime.Now;
+
         var typeIds = types.Select(t => t.RoomTypeId).ToList();
 
         var rooms = await _context.Rooms
@@ -108,6 +136,7 @@ public class RoomsController : Controller
             .ToListAsync();
 
         HashSet<int> blockedRoomIds = new();
+
         if (checkIn != null && checkOut != null)
         {
             blockedRoomIds = (await _context.Bookings
@@ -120,6 +149,7 @@ public class RoomsController : Controller
         }
 
         var cards = new List<RoomTypeCardViewModel>();
+
         foreach (var type in types)
         {
             int nights = (checkIn != null && checkOut != null && checkOut > checkIn)

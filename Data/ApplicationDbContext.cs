@@ -98,9 +98,6 @@ public class ApplicationDbContext : DbContext
 
         // Payment: one booking can have many attempts. AttemptNo is unique per booking.
         modelBuilder.Entity<Payment>()
-            .HasIndex(p => p.BookingId);
-
-        modelBuilder.Entity<Payment>()
             .HasIndex(p => new { p.BookingId, p.AttemptNo })
             .IsUnique();
 
