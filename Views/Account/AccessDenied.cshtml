@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="container py-5" style="margin-top: 70px;">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h2 style="font-family: 'Playfair Display', serif;">Access Denied</h2>
+            <p class="text-muted">You do not have permission to view this page. Please login with an account that has access.</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-heritage me-2">Go to Homepage</a>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary">Login</a>
+        </div>
+    </div>
+</div>
