@@ -1,0 +1,98 @@
+@model List<HotelBookingSystem.Models.Booking>
+
+@{
+    ViewData["Title"] = "Manage Bookings";
+    string[] statuses = new[] { "Pending", "Confirmed", "CheckedIn", "CheckedOut", "Cancelled", "NoShow" };
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80"
+         alt="Manage bookings" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Manage Bookings</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a> &raquo; Bookings</p>
+        </div>
+    </section>
+
+    <!-- BOOKINGS LIST -->
+    <section class="section fade-in">
+        <div class="container">
+            <form method="get" asp-controller="Admin" asp-action="Bookings" class="card shadow-sm p-3 mb-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label" for="search">Search (booking ref, guest name or email)</label>
+                        <input class="form-control" type="text" id="search" name="search" value="@ViewBag.Search"
+                               placeholder="FH-000001 or guest name" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="status">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">All statuses</option>
+                            @foreach (var s in statuses)
+                            {
+                                if ((string?)ViewBag.Status == s)
+                                {
+                                    <option value="@s" selected>@s</option>
+                                }
+                                else
+                                {
+                                    <option value="@s">@s</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-heritage w-100">Search</button>
+                    </div>
+                </div>
+            </form>
+
+            @if (!Model.Any())
+            {
+                <p class="text-muted text-center">No bookings found for this search.</p>
+            }
+            else
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body p-0">
+                        <table class="table table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Ref</th>
+                                    <th>Guest</th>
+                                    <th>Room</th>
+                                    <th>Dates</th>
+                                    <th>Guests</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var b in Model)
+                                {
+                                    <tr>
+                                        <td><strong>@b.BookingRef</strong></td>
+                                        <td>@(b.User?.FullName ?? "-")<br /><span class="text-muted small">@(b.User?.Email ??
+                                                        "-")</span></td>
+                                            <td>@(b.Room?.RoomNumber ?? "-") - @(b.Room?.RoomType?.Name ?? "-")</td>
+                                            <td>@b.CheckInDate.ToString("dd MMM yyyy") - @b.CheckOutDate.ToString("dd MMM yyyy")</td>
+                                            <td>@b.Guests</td>
+                                            <td>₹@b.TotalAmount.ToString("N0")</td>
+                                            <td><span
+                                                class="badge @(b.Status == "Confirmed" ? "bg-success" : b.Status == "Pending" ? "bg-warning text-dark" : b.Status == "Cancelled" ? "bg-danger" : b.Status == "CheckedIn" ? "bg-primary" : "bg-secondary")">@b.Status</span>
+                                            </td>
+                                            <td><a class="btn btn-heritage btn-sm" asp-controller="Admin" asp-action="BookingDetails"
+                                                       asp-route-id="@b.BookingId">View</a></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>

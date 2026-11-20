@@ -1,0 +1,219 @@
+@model HotelBookingSystem.ViewModels.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80"
+         alt="Admin dashboard" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Admin Dashboard</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; Admin Dashboard</p>
+    </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="section fade-in">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">@Model.TotalBookings</h3>
+                        <p class="text-muted mb-0">Total Bookings</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">@Model.ConfirmedBookings</h3>
+                        <p class="text-muted mb-0">Confirmed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">@Model.CheckedInBookings</h3>
+                        <p class="text-muted mb-0">Checked In</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">
+                            ₹@Model.TotalRevenue.ToString("N0")</h3>
+                            <p class="text-muted mb-0">Total Revenue (demo payments)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">@Model.PendingBookings</h3>
+                            <p class="text-muted mb-0">Pending (unpaid holds)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">@Model.TotalCustomers</h3>
+                            <p class="text-muted mb-0">Customers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">@Model.OccupiedRoomsToday /
+                                @Model.TotalRooms</h3>
+                                <p class="text-muted mb-0">Rooms occupied today (@Model.AvailableRooms operational)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <h3 class="mb-0" style="font-family: 'Playfair Display', serif;">@Model.PendingReviews</h3>
+                                <p class="text-muted mb-0">Reviews awaiting approval</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Today's Check-ins (@Model.TodayCheckIns.Count)</h5>
+                                @if (!Model.TodayCheckIns.Any())
+                                {
+                                    <p class="text-muted mb-0">No check-ins due today.</p>
+                                }
+                                else
+                                {
+                                    <table class="table table-sm mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Guest</th>
+                                                <th>Room</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var b in Model.TodayCheckIns)
+                                            {
+                                                <tr>
+                                                    <td>@b.BookingRef</td>
+                                                    <td>@(b.User?.FullName ?? "-")</td>
+                                                    <td>@(b.Room?.RoomNumber ?? "-") - @(b.Room?.RoomType?.Name ?? "-")</td>
+                                                    <td><a class="btn btn-heritage btn-sm" asp-controller="Admin"
+                                                               asp-action="BookingDetails" asp-route-id="@b.BookingId">View</a></td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Today's Check-outs (@Model.TodayCheckOuts.Count)</h5>
+                                    @if (!Model.TodayCheckOuts.Any())
+                                    {
+                                        <p class="text-muted mb-0">No check-outs due today.</p>
+                                    }
+                                    else
+                                    {
+                                        <table class="table table-sm mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ref</th>
+                                                    <th>Guest</th>
+                                                    <th>Room</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var b in Model.TodayCheckOuts)
+                                                {
+                                                    <tr>
+                                                        <td>@b.BookingRef</td>
+                                                        <td>@(b.User?.FullName ?? "-")</td>
+                                                        <td>@(b.Room?.RoomNumber ?? "-") - @(b.Room?.RoomType?.Name ?? "-")</td>
+                                                        <td><a class="btn btn-heritage btn-sm" asp-controller="Admin"
+                                                                   asp-action="BookingDetails" asp-route-id="@b.BookingId">View</a></td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Recent Bookings</h5>
+                                @if (!Model.RecentBookings.Any())
+                                {
+                                    <p class="text-muted mb-0">No bookings yet.</p>
+                                }
+                                else
+                                {
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Ref</th>
+                                                <th>Guest</th>
+                                                <th>Room</th>
+                                                <th>Dates</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var b in Model.RecentBookings)
+                                            {
+                                                <tr>
+                                                    <td>@b.BookingRef</td>
+                                                    <td>@(b.User?.FullName ?? "-")</td>
+                                                    <td>@(b.Room?.RoomNumber ?? "-") - @(b.Room?.RoomType?.Name ?? "-")</td>
+                                                    <td>@b.CheckInDate.ToString("dd MMM yyyy") - @b.CheckOutDate.ToString("dd MMM yyyy")</td>
+                                                    <td>₹@b.TotalAmount.ToString("N0")</td>
+                                                    <td><span
+                                                        class="badge @(b.Status == "Confirmed" ? "bg-success" : b.Status == "Pending" ? "bg-warning text-dark" : b.Status == "Cancelled" ? "bg-danger" : "bg-secondary")">@b.Status</span>
+                                                    </td>
+                                                    <td><a class="btn btn-heritage btn-sm" asp-controller="Admin" asp-action="BookingDetails"
+                                                               asp-route-id="@b.BookingId">View</a></td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <a class="btn btn-heritage me-2" asp-controller="Admin" asp-action="Bookings">Manage Bookings</a>
+                                <a class="btn btn-outline-heritage me-2" asp-controller="Admin" asp-action="Customers">Customers</a>
+                                <a class="btn btn-outline-heritage me-2" asp-controller="Admin" asp-action="Payments">Payments</a>
+                                <a class="btn btn-outline-heritage me-2" asp-controller="AdminRoomTypes" asp-action="Index">Room Types</a>
+                                <a class="btn btn-outline-heritage" asp-controller="AdminRooms" asp-action="Index">Rooms</a>
+                            </div>
+                        </div>
+                    </section>

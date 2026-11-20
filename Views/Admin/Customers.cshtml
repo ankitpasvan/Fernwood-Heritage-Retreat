@@ -1,0 +1,77 @@
+@model List<HotelBookingSystem.ViewModels.AdminCustomerViewModel>
+
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80"
+         alt="Customers" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Customers</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a> &raquo; Customers</p>
+        </div>
+    </section>
+
+    <!-- CUSTOMERS -->
+    <section class="section fade-in">
+        <div class="container">
+            <form method="get" asp-controller="Admin" asp-action="Customers" class="card shadow-sm p-3 mb-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-10">
+                        <label class="form-label" for="search">Search (name or email)</label>
+                        <input class="form-control" type="text" id="search" name="search" value="@ViewBag.Search"
+                               placeholder="Guest name or email" />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-heritage w-100">Search</button>
+                    </div>
+                </div>
+            </form>
+
+            @if (!Model.Any())
+            {
+                <p class="text-muted text-center">No customers found.</p>
+            }
+            else
+            {
+                <div class="card shadow-sm">
+                    <div class="card-body p-0">
+                        <table class="table table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Joined</th>
+                                    <th>Bookings</th>
+                                    <th>Total Spent</th>
+                                    <th>Last Booking</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var c in Model)
+                                {
+                                    <tr>
+                                        <td><strong>@c.FullName</strong></td>
+                                        <td>@c.Email</td>
+                                        <td>@(c.Phone ?? "-")</td>
+                                        <td>@c.CreatedAt.ToString("dd MMM yyyy")</td>
+                                        <td>@c.BookingCount</td>
+                                        <td>₹@c.TotalSpent.ToString("N0")</td>
+                                        <td>@(c.LastBookingDate?.ToString("dd MMM yyyy") ?? "-")</td>
+                                        <td><a class="btn btn-heritage btn-sm" asp-controller="Admin" asp-action="Bookings"
+                                                   asp-route-search="@c.Email">Bookings</a></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>

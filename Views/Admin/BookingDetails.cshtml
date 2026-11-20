@@ -1,0 +1,208 @@
+@model HotelBookingSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking " + Model.BookingRef;
+    int nights = Model.CheckOutDate.DayNumber - Model.CheckInDate.DayNumber;
+    string badgeClass = Model.Status switch
+    {
+        "Confirmed" => "bg-success",
+        "Pending" => "bg-warning text-dark",
+        "Cancelled" => "bg-danger",
+        "CheckedIn" => "bg-primary",
+        "CheckedOut" => "bg-secondary",
+        _ => "bg-secondary"
+    };
+    string bannerImg = Model.Room?.RoomType?.ImageUrl ??
+"https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="@bannerImg" alt="@(Model.Room?.RoomType?.Name ?? "Booking")" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Booking @Model.BookingRef</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a> &raquo; <a asp-controller="Admin"
+                                                                                         asp-action="Bookings">Bookings</a> &raquo; @Model.BookingRef</p>
+        </div>
+    </section>
+
+    <!-- ADMIN BOOKING DETAILS -->
+    <section class="section fade-in">
+        <div class="container">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+
+            <div class="row">
+                <div class="col-md-7 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title d-flex justify-content-between align-items-center">
+                                Booking details
+                                <span class="badge @badgeClass">@Model.Status</span>
+                            </h5>
+                            <table class="table table-borderless mb-0">
+                                <tr>
+                                    <th style="width: 40%;">Booking reference</th>
+                                    <td><strong>@Model.BookingRef</strong></td>
+                                </tr>
+                                <tr>
+                                    <th>Guest</th>
+                                    <td>@(Model.User?.FullName ?? "-") (@(Model.User?.Email ?? "-"))</td>
+                                </tr>
+                                <tr>
+                                    <th>Guest phone</th>
+                                    <td>@(Model.User?.Phone ?? "-")</td>
+                                </tr>
+                                <tr>
+                                    <th>Room</th>
+                                    <td>@(Model.Room?.RoomNumber ?? "-") - @(Model.Room?.RoomType?.Name ?? "-")</td>
+                                </tr>
+                                <tr>
+                                    <th>Check-in</th>
+                                    <td>@Model.CheckInDate.ToString("dd MMM yyyy") (2:00 PM)</td>
+                                </tr>
+                                <tr>
+                                    <th>Check-out</th>
+                                    <td>@Model.CheckOutDate.ToString("dd MMM yyyy") (11:00 AM)</td>
+                                </tr>
+                                <tr>
+                                    <th>Nights</th>
+                                    <td>@nights</td>
+                                </tr>
+                                <tr>
+                                    <th>Guests</th>
+                                    <td>@Model.Adults adult(s), @Model.Children children (@Model.Guests total)</td>
+                                </tr>
+                                <tr>
+                                    <th>Total amount</th>
+                                    <td><strong>₹@Model.TotalAmount.ToString("N0")</strong></td>
+                                </tr>
+                                <tr>
+                                    <th>Booked on</th>
+                                    <td>@Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
+                                </tr>
+                            </table>
+                            @if (Model.Status == "Pending" && Model.PendingExpiresAt != null)
+                            {
+                                <div class="alert alert-warning mt-3 mb-0">
+                                    Unpaid hold - expires at <strong>@Model.PendingExpiresAt.Value.ToString("dd MMM yyyy, hh:mm tt")</strong>. After that it becomes Cancelled automatically.
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Payments</h5>
+                            @if (Model.Payments != null && Model.Payments.Any())
+                            {
+                                <table class="table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Attempt</th>
+                                            <th>Method</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Transaction ref</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var p in Model.Payments.OrderByDescending(p => p.CreatedAt))
+                                        {
+                                            <tr>
+                                                <td>@p.AttemptNo</td>
+                                                <td>@p.Method</td>
+                                                <td>₹@p.Amount.ToString("N0")</td>
+                                                <td>
+                                                    <span
+                                                    class="badge @(p.Status == "Success" ? "bg-success" : p.Status == "Failed" ? "bg-danger" : "bg-secondary")">@p.Status</span>
+                                                </td>
+                                                <td>@(p.TransactionRef ?? "-")</td>
+                                                <td>@p.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <p class="text-muted mb-0">No payment attempts yet.</p>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Guest Review</h5>
+                            @if (Model.Review != null)
+                            {
+                                <p class="mb-1"><span class="stars">@(new string('★', Model.Review.Rating))@(new string('☆', 5 -
+                                                                    Model.Review.Rating))</span> (@Model.Review.Rating/5)</p>
+                                    <p class="mb-1">@Model.Review.Comment</p>
+                                    <p class="text-muted small mb-0">
+                                        Submitted on @Model.Review.CreatedAt.ToString("dd MMM yyyy") -
+                                        <span
+                                            class="badge @(Model.Review.IsApproved ? "bg-success" : "bg-warning text-dark")">@(Model.Review.IsApproved
+                                            ? "Approved" : "Awaiting approval")</span>
+                                        </p>
+                                    }
+                        else
+                                    {
+                                        <p class="text-muted mb-0">No review submitted for this booking yet. (Review moderation comes in
+                                            the next batch.)</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="card shadow-sm">
+                                    <div class="card-body p-4">
+                                        <h5 class="card-title">Admin Actions</h5>
+                                        @if (Model.Status == "Confirmed")
+                                        {
+                                            <form asp-controller="Admin" asp-action="CheckIn" asp-route-id="@Model.BookingId" method="post"
+                                                  class="mb-2">
+                                                <button type="submit" class="btn btn-heritage w-100">Check In Guest</button>
+                                            </form>
+                                        }
+                                        @if (Model.Status == "CheckedIn")
+                                        {
+                                            <form asp-controller="Admin" asp-action="CheckOut" asp-route-id="@Model.BookingId" method="post"
+                                                  class="mb-2">
+                                                <button type="submit" class="btn btn-heritage w-100">Check Out Guest</button>
+                                            </form>
+                                        }
+                                        @if ((Model.Status == "Pending" || Model.Status == "Confirmed") && Model.CheckInDate >
+                                        DateOnly.FromDateTime(DateTime.Today))
+                                        {
+                                            <form asp-controller="Admin" asp-action="Cancel" asp-route-id="@Model.BookingId" method="post"
+                                                  class="mb-2">
+                                                <button type="submit" class="btn btn-outline-danger w-100"
+                                                        onclick="return confirm('Are you sure you want to cancel this booking?');">Cancel
+                                                    Booking</button>
+                                                </form>
+                                            }
+                                            @if (Model.Status == "Confirmed")
+                                            {
+                                                <p class="text-muted small mt-2 mb-0">Check-in is possible from the check-in date
+                                                    (@Model.CheckInDate.ToString("dd MMM yyyy")).</p>
+                                                }
+                                                <a class="btn btn-outline-heritage w-100 mt-2" asp-controller="Admin" asp-action="Bookings">Back
+                                                    to Bookings</a>
+                                                    <a class="btn btn-outline-heritage w-100 mt-2" asp-controller="Admin"
+                                                       asp-action="Dashboard">Back to Dashboard</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>

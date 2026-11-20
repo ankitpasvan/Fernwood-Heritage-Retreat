@@ -1,0 +1,99 @@
+@model List<HotelBookingSystem.Models.Payment>
+
+@{
+    ViewData["Title"] = "Payments";
+    decimal totalRevenue = ViewBag.TotalRevenue ?? 0m;
+    string[] statuses = new[] { "Success", "Failed", "Pending", "Refunded" };
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80"
+         alt="Payments" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Payments</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
+            asp-controller="Admin" asp-action="Dashboard">Admin Dashboard</a> &raquo; Payments</p>
+        </div>
+    </section>
+
+    <!-- PAYMENTS -->
+    <section class="section fade-in">
+        <div class="container">
+            <p class="text-muted small mb-3">All payments shown here are demo (mock) payments. No real money was charged.
+            </p>
+            <div class="alert alert-success">Total revenue (successful demo payments):
+                <strong>₹@totalRevenue.ToString("N0")</strong></div>
+
+                <form method="get" asp-controller="Admin" asp-action="Payments" class="card shadow-sm p-3 mb-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-10">
+                            <label class="form-label" for="status">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">All statuses</option>
+                                @foreach (var s in statuses)
+                                {
+                                    if ((string?)ViewBag.Status == s)
+                                    {
+                                        <option value="@s" selected>@s</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@s">@s</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-heritage w-100">Filter</button>
+                        </div>
+                    </div>
+                </form>
+
+                @if (!Model.Any())
+                {
+                    <p class="text-muted text-center">No payments found.</p>
+                }
+                else
+                {
+                    <div class="card shadow-sm">
+                        <div class="card-body p-0">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Booking</th>
+                                        <th>Guest</th>
+                                        <th>Method</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Transaction ref</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var p in Model)
+                                    {
+                                        <tr>
+                                            <td>@p.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
+                                            <td>
+                                                <a asp-controller="Admin" asp-action="BookingDetails"
+                                                   asp-route-id="@p.BookingId">@(p.Booking?.BookingRef ?? "-")</a>
+                                            </td>
+                                            <td>@(p.Booking?.User?.FullName ?? "-")</td>
+                                            <td>@p.Method (Attempt @p.AttemptNo)</td>
+                                            <td>₹@p.Amount.ToString("N0")</td>
+                                            <td>
+                                                <span
+                                                class="badge @(p.Status == "Success" ? "bg-success" : p.Status == "Failed" ? "bg-danger" : "bg-secondary")">@p.Status</span>
+                                            </td>
+                                            <td>@(p.TransactionRef ?? "-")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
