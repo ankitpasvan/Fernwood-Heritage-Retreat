@@ -1,0 +1,64 @@
+@model HotelBookingSystem.ViewModels.ReviewsIndexViewModel
+
+@{
+    ViewData["Title"] = "Guest Reviews";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=80"
+         alt="Guest reviews" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Guest Reviews</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; Guest Reviews</p>
+    </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section fade-in">
+    <div class="container">
+        <div class="text-center mb-5">
+            <p class="section-eyebrow">What our guests say</p>
+            @if (Model.TotalReviews > 0)
+            {
+                <h2 class="section-title">@Model.AverageRating.ToString("0.0") out of 5</h2>
+                <p class="text-muted">Based on @Model.TotalReviews verified guest review(s) from completed stays.</p>
+            }
+            else
+            {
+                <h2 class="section-title">No reviews yet</h2>
+                <p class="text-muted">Guest reviews will appear here after completed stays are reviewed and approved.</p>
+            }
+        </div>
+
+        @if (!Model.Reviews.Any())
+        {
+            <div class="text-center">
+                <p class="text-muted">Be our first reviewer — book a stay, complete it, and share your experience.</p>
+                <a class="btn btn-heritage" asp-controller="Rooms" asp-action="Search">Book a Stay</a>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var r in Model.Reviews)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card review-card shadow-sm h-100">
+                            <div class="card-body p-4">
+                                <p class="stars mb-2">@(new string('★', r.Rating))@(new string('☆', 5 - r.Rating))</p>
+                                <h5 class="card-title">@r.Title</h5>
+                                <p class="card-text">@(r.Comment ?? "")</p>
+                                <p class="text-muted small mb-0">
+                                    <strong>@(r.Booking?.User?.FullName ?? "Guest")</strong><br />
+                                    @(r.RoomType?.Name ?? "") &middot; @r.CreatedAt.ToString("dd MMM yyyy")
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
