@@ -110,7 +110,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <button class="btn btn-heritage w-100" type="submit">Check Availability</button>
+                                    <button class="btn btn-book w-100" type="submit">Check Availability</button>
                                 </div>
                             </div>
                             <p id="bookingBarError" class="text-danger small mt-2 mb-0" style="display:none;"></p>
@@ -511,7 +511,7 @@
                                                                                         @if (reviewCount > 0)
                                                                                         {
                                                                                             <p class="text-muted"><span class="stars">@for (var s = 1; s <= 5; s++) {
-                                                                                                @(s <= Math.Round(avgRating) ? "★"         : "☆")
+                                                                                                @(s <= Math.Round(avgRating) ? "★"    : "☆")
                                                                                             }
                                                                                         </span> @avgRating.ToString("0.0") / 5 &mdash; Based on @reviewCount guest
                                                                                         review@(reviewCount == 1 ? "" : "s")</p>
@@ -563,33 +563,3 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </section>
-
-                                                                                <!-- LOCATION -->
-                                                                                <section class="section fade-in">
-                                                                                    <div class="container">
-                                                                                        <div class="row align-items-center">
-                                                                                            <div class="col-md-5">
-                                                                                                <p class="section-eyebrow">Find Us</p>
-                                                                                                <h2 class="section-title">Visit Fernwood.</h2>
-                                                                                                <p class="text-muted">Fernwood Estate, Jharipani Road, Mussoorie Hills, Mussoorie, Uttarakhand</p>
-                                                                                                <p class="mb-1"><strong>Phone:</strong> +91 98765 43210</p>
-                                                                                                <p class="mb-1"><strong>Email:</strong> stay@fernwoodheritage.in</p>
-                                                                                                <p class="mb-1"><strong>Check-in:</strong> 2:00 PM &nbsp;&bull;&nbsp; <strong>Check-out:</strong> 11:00
-                                                                                                    AM</p>
-                                                                                                    <p class="text-muted">Jolly Grant Airport, Dehradun - approx. 60 km. Dehradun Railway Station - approx.
-                                                                                                        25 km.</p>
-                                                                                                        <div class="mt-4">
-                                                                                                            <a class="btn btn-gold me-2"
-                                                                                                               href="https://www.google.com/maps/search/?api=1&query=Jharipani+Road+Mussoorie+Uttarakhand"
-                                                                                                               target="_blank" rel="noopener">Get Directions</a>
-                                                                                                            <a class="btn btn-outline-heritage" asp-controller="Pages" asp-action="Contact">Contact Us</a>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-md-7 mt-4 mt-md-0">
-                                                                                                        <iframe class="location-map" title="Map - Fernwood Heritage Retreat" loading="lazy"
-                                                                                                                referrerpolicy="no-referrer-when-downgrade"
-                                                                                                                src="https://www.google.com/maps?q=Jharipani+Road,+Mussoorie,+Uttarakhand&output=embed"></iframe>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </section>
