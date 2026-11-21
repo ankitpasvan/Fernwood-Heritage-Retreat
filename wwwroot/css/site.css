@@ -149,9 +149,11 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
 }
 
 /* ---------- Premium navbar (transparent over hero, dark on scroll) ---------- */
-.navbar-heritage { background: transparent; border-bottom: none; box-shadow: none; padding-top: 0.7rem; padding-bottom: 0.7rem; transition: background 0.3s ease, box-shadow 0.3s ease; }
+.navbar-heritage { background: transparent; border-bottom: none; box-shadow: none; padding-top: 0.7rem; padding-bottom: 0.7rem; transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, visibility 0.3s ease; }
 
 .navbar-heritage.navbar-scrolled, .navbar-heritage.navbar-solid, .navbar-heritage.navbar-menu-open { background: rgba(23, 19, 15, 0.92); box-shadow: 0 1px 12px rgba(0, 0, 0, 0.25); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+
+.navbar-heritage.navbar-hidden { transform: translateY(-100%); visibility: hidden; }
 
 .navbar-heritage .navbar-brand { margin-right: 1rem; }
 
@@ -345,6 +347,7 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
     .hero-slide { transition: none; }
     .hero-slide-img { animation: none; }
     .fade-in { transition: none; }
+    .navbar-heritage { transition: none; }
     .room-card, .gallery-img, .img-zoom, .exp-tall img { transition: none; }
 }
 

@@ -105,7 +105,7 @@ if (fadeElements.length > 0) {
   }
 }
 
-// ---------- Hero carousel: 3 slides, 30s auto-advance, pause on hover ----------
+// ---------- Hero carousel: 3 slides, 7s auto-advance, pause on hover ----------
 var heroCarousel = document.getElementById("heroCarousel");
 
 if (heroCarousel) {
@@ -115,7 +115,7 @@ if (heroCarousel) {
   var heroNext = heroCarousel.querySelector(".hero-next");
   var heroIndex = 0;
   var heroTimer = null;
-  var heroDelay = 30000;
+  var heroDelay = 7000;
   var reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
@@ -177,4 +177,44 @@ if (heroCarousel) {
   });
 
   startHeroTimer();
+}
+
+// ---------- Smart navbar: dark background on scroll, hide on scroll down, show on scroll up ----------
+var navbar = document.querySelector(".navbar-heritage");
+
+if (navbar) {
+  var lastScrollY = window.scrollY;
+
+  function updateNavbar() {
+    var currentY = window.scrollY;
+    var menuOpen = navbar.classList.contains("navbar-menu-open");
+
+    navbar.classList.toggle("navbar-scrolled", currentY > 40);
+
+    if (currentY <= 40 || menuOpen) {
+      navbar.classList.remove("navbar-hidden");
+      lastScrollY = currentY;
+    } else if (currentY > lastScrollY + 5) {
+      navbar.classList.add("navbar-hidden");
+      lastScrollY = currentY;
+    } else if (currentY < lastScrollY - 5) {
+      navbar.classList.remove("navbar-hidden");
+      lastScrollY = currentY;
+    }
+  }
+
+  updateNavbar();
+  window.addEventListener("scroll", updateNavbar, { passive: true });
+
+  var navCollapse = document.getElementById("navbarNav");
+  if (navCollapse) {
+    navCollapse.addEventListener("show.bs.collapse", function () {
+      navbar.classList.add("navbar-menu-open");
+      navbar.classList.remove("navbar-hidden");
+    });
+    navCollapse.addEventListener("hide.bs.collapse", function () {
+      navbar.classList.remove("navbar-menu-open");
+      updateNavbar();
+    });
+  }
 }
