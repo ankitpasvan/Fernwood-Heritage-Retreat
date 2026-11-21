@@ -99,149 +99,151 @@
                                                                        asp-controller="Admin" asp-action="Customers">Customers</a></li>
                                                                 <li><a class="dropdown-item @(isCurrent("Admin", "Payments") ? "active" : "")"
                                                                            asp-controller="Admin" asp-action="Payments">Payments</a></li>
-                                                                    <li>
-                                                                        <hr class="dropdown-divider" />
-                                                                    </li>
-                                                                    <li><a class="dropdown-item @(isCurrent("AdminRoomTypes", "") ? "active" : "")"
-                                                                               asp-controller="AdminRoomTypes" asp-action="Index">Room Types</a></li>
-                                                                        <li><a class="dropdown-item @(isCurrent("AdminRooms", "") ? "active" : "")"
-                                                                                   asp-controller="AdminRooms" asp-action="Index">Rooms</a></li>
-                                                                            <li><a class="dropdown-item @(isCurrent("AdminAmenities", "") ? "active" : "")"
-                                                                                       asp-controller="AdminAmenities" asp-action="Index">Amenities</a></li>
-                                                                                <li><a class="dropdown-item @(isCurrent("AdminReviews", "") ? "active" : "")"
-                                                                                           asp-controller="AdminReviews" asp-action="Index">Reviews</a></li>
-                                                                                    <li><a class="dropdown-item @(isCurrent("AdminEnquiries", "") ? "active" : "")"
-                                                                                               asp-controller="AdminEnquiries" asp-action="Index">Enquiries</a></li>
-                                                                                    </ul>
-                                                                                </li>
-                                                                            }
-                                                                        </ul>
-                                                                        <ul class="navbar-nav ms-auto align-items-lg-center">
-                                                                            @if (User.Identity != null && User.Identity.IsAuthenticated)
-                                                                            {
-                                                                                <li class="nav-item">
-                                                                                    <a class="nav-link @(isCurrent("Bookings", "") ? "active" : "")" asp-controller="Bookings"
-                                                                                       asp-action="MyBookings">My Bookings</a>
-                                                                                </li>
-                                                                                <li class="nav-item dropdown">
-                                                                                    <a class="nav-link dropdown-toggle @(accountActive ? "active" : "")" href="#"
-                                                                                       id="accountDropdown" role="button" data-bs-toggle="dropdown"
-                                                                                       aria-expanded="false">Hello, @User.Identity.Name</a>
-                                                                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-                                                                                        <li><a class="dropdown-item @(isCurrent("Bookings", "") ? "active" : "")"
-                                                                                                   asp-controller="Bookings" asp-action="MyBookings">My Bookings</a></li>
-                                                                                            <li><a class="dropdown-item @(isCurrent("Payments", "") ? "active" : "")"
-                                                                                                       asp-controller="Payments" asp-action="History">My Payments</a></li>
-                                                                                                <li><a class="dropdown-item @(isCurrent("Reviews", "MyReviews") ? "active" : "")"
-                                                                                                           asp-controller="Reviews" asp-action="MyReviews">My Reviews</a></li>
-                                                                                                    <li>
-                                                                                                        <hr class="dropdown-divider" />
-                                                                                                    </li>
-                                                                                                    <li>
-                                                                                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                                                                                                            <button type="submit" class="dropdown-item">Logout</button>
-                                                                                                        </form>
-                                                                                                    </li>
-                                                                                                </ul>
-                                                                                            </li>
-                                                                                        }
-                        else
-                                                                                        {
-                                                                                            <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
-                                                                                            </li>
-                                                                                            <li class="nav-item"><a class="nav-link" asp-controller="Account"
-                                                                                                                        asp-action="Register">Register</a></li>
+                                                                    <li><a class="dropdown-item @(isCurrent("AdminReports", "Index") ? "active" : "")"
+                                                                               asp-controller="AdminReports" asp-action="Index">Reports</a></li>
+                                                                        <li>
+                                                                            <hr class="dropdown-divider" />
+                                                                        </li>
+                                                                        <li><a class="dropdown-item @(isCurrent("AdminRoomTypes", "") ? "active" : "")"
+                                                                                   asp-controller="AdminRoomTypes" asp-action="Index">Room Types</a></li>
+                                                                            <li><a class="dropdown-item @(isCurrent("AdminRooms", "") ? "active" : "")"
+                                                                                       asp-controller="AdminRooms" asp-action="Index">Rooms</a></li>
+                                                                                <li><a class="dropdown-item @(isCurrent("AdminAmenities", "") ? "active" : "")"
+                                                                                           asp-controller="AdminAmenities" asp-action="Index">Amenities</a></li>
+                                                                                    <li><a class="dropdown-item @(isCurrent("AdminReviews", "") ? "active" : "")"
+                                                                                               asp-controller="AdminReviews" asp-action="Index">Reviews</a></li>
+                                                                                        <li><a class="dropdown-item @(isCurrent("AdminEnquiries", "") ? "active" : "")"
+                                                                                                   asp-controller="AdminEnquiries" asp-action="Index">Enquiries</a></li>
+                                                                                        </ul>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                            <ul class="navbar-nav ms-auto align-items-lg-center">
+                                                                                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                                                                                {
+                                                                                    <li class="nav-item">
+                                                                                        <a class="nav-link @(isCurrent("Bookings", "") ? "active" : "")" asp-controller="Bookings"
+                                                                                           asp-action="MyBookings">My Bookings</a>
+                                                                                    </li>
+                                                                                    <li class="nav-item dropdown">
+                                                                                        <a class="nav-link dropdown-toggle @(accountActive ? "active" : "")" href="#"
+                                                                                           id="accountDropdown" role="button" data-bs-toggle="dropdown"
+                                                                                           aria-expanded="false">Hello, @User.Identity.Name</a>
+                                                                                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
+                                                                                            <li><a class="dropdown-item @(isCurrent("Bookings", "") ? "active" : "")"
+                                                                                                       asp-controller="Bookings" asp-action="MyBookings">My Bookings</a></li>
+                                                                                                <li><a class="dropdown-item @(isCurrent("Payments", "") ? "active" : "")"
+                                                                                                           asp-controller="Payments" asp-action="History">My Payments</a></li>
+                                                                                                    <li><a class="dropdown-item @(isCurrent("Reviews", "MyReviews") ? "active" : "")"
+                                                                                                               asp-controller="Reviews" asp-action="MyReviews">My Reviews</a></li>
+                                                                                                        <li>
+                                                                                                            <hr class="dropdown-divider" />
+                                                                                                        </li>
+                                                                                                        <li>
+                                                                                                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                                                                                                <button type="submit" class="dropdown-item">Logout</button>
+                                                                                                            </form>
+                                                                                                        </li>
+                                                                                                    </ul>
+                                                                                                </li>
                                                                                             }
-                                                                                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                                                                                                <a class="btn btn-book" asp-controller="Rooms" asp-action="Search">Book Now</a>
-                                                                                            </li>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </nav>
-                                                                        </header>
-
-                                                                        <main role="main" class="@(hasHero ? "" : "main-solid-nav")">
-                                                                            @RenderBody()
-                                                                        </main>
-
-                                                                        <footer class="footer-heritage">
-                                                                            <div class="container footer-main">
-                                                                                <div class="row g-4">
-                                                                                    <div class="col-lg-4 col-md-6">
-                                                                                        <a class="footer-brand" asp-controller="Home" asp-action="Index">
-                                                                                            Fernwood <span class="footer-brand-gold">Heritage Retreat</span>
-                                                                                        </a>
-                                                                                        <ul class="footer-contact">
-                                                                                            <li>
-                                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                                                                                     aria-hidden="true">
-                                                                                                    <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z" />
-                                                                                                    <circle cx="12" cy="10" r="2.5" />
-                                                                                                </svg>
-                                                                                                <span>Fernwood Estate, Jharipani Road, Mussoorie Hills,<br />Mussoorie, Uttarakhand</span>
-                                                                                            </li>
-                                                                                        </ul>
-                                                                                        <div class="footer-contact-row">
-                                                                                            <span class="footer-contact-item">
-                                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                                                                                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                                                                                    <path
-                                                                                                    d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" />
-                                                                                                </svg>
-                                                                                                +91 98765 43210
-                                                                                            </span>
-                                                                                            <span class="footer-contact-item">
-                                                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                                                                                                     stroke-linejoin="round" aria-hidden="true">
-                                                                                                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                                                                                                    <path d="m3 7 9 6 9-6" />
-                                                                                                </svg>
-                                                                                                stay@fernwoodheritage.in
-                                                                                            </span>
+                        else
+                                                                                            {
+                                                                                                <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                                                                                                </li>
+                                                                                                <li class="nav-item"><a class="nav-link" asp-controller="Account"
+                                                                                                                            asp-action="Register">Register</a></li>
+                                                                                                }
+                                                                                                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                                                                                    <a class="btn btn-book" asp-controller="Rooms" asp-action="Search">Book Now</a>
+                                                                                                </li>
+                                                                                            </ul>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-lg-2 col-md-6">
-                                                                                        <h6 class="footer-heading">Hotel</h6>
-                                                                                        <div class="footer-links">
-                                                                                            <a asp-controller="Rooms" asp-action="Index">Rooms &amp; Suites</a>
-                                                                                            <a asp-controller="Pages" asp-action="Gallery">Hotel Gallery</a>
-                                                                                            <a asp-controller="Pages" asp-action="About">About</a>
-                                                                                            <a asp-controller="Pages" asp-action="Contact">Hotel Contact</a>
+                                                                                </nav>
+                                                                            </header>
+
+                                                                            <main role="main" class="@(hasHero ? "" : "main-solid-nav")">
+                                                                                @RenderBody()
+                                                                            </main>
+
+                                                                            <footer class="footer-heritage">
+                                                                                <div class="container footer-main">
+                                                                                    <div class="row g-4">
+                                                                                        <div class="col-lg-4 col-md-6">
+                                                                                            <a class="footer-brand" asp-controller="Home" asp-action="Index">
+                                                                                                Fernwood <span class="footer-brand-gold">Heritage Retreat</span>
+                                                                                            </a>
+                                                                                            <ul class="footer-contact">
+                                                                                                <li>
+                                                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                         aria-hidden="true">
+                                                                                                        <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z" />
+                                                                                                        <circle cx="12" cy="10" r="2.5" />
+                                                                                                    </svg>
+                                                                                                    <span>Fernwood Estate, Jharipani Road, Mussoorie Hills,<br />Mussoorie, Uttarakhand</span>
+                                                                                                </li>
+                                                                                            </ul>
+                                                                                            <div class="footer-contact-row">
+                                                                                                <span class="footer-contact-item">
+                                                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                                                                        <path
+                                                                                                        d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" />
+                                                                                                    </svg>
+                                                                                                    +91 98765 43210
+                                                                                                </span>
+                                                                                                <span class="footer-contact-item">
+                                                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                         stroke-linejoin="round" aria-hidden="true">
+                                                                                                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                                                                                                        <path d="m3 7 9 6 9-6" />
+                                                                                                    </svg>
+                                                                                                    stay@fernwoodheritage.in
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-lg-2 col-md-6">
+                                                                                            <h6 class="footer-heading">Hotel</h6>
+                                                                                            <div class="footer-links">
+                                                                                                <a asp-controller="Rooms" asp-action="Index">Rooms &amp; Suites</a>
+                                                                                                <a asp-controller="Pages" asp-action="Gallery">Hotel Gallery</a>
+                                                                                                <a asp-controller="Pages" asp-action="About">About</a>
+                                                                                                <a asp-controller="Pages" asp-action="Contact">Hotel Contact</a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-lg-2 col-md-6">
+                                                                                            <h6 class="footer-heading">Dining</h6>
+                                                                                            <div class="footer-links">
+                                                                                                <a asp-controller="Pages" asp-action="Dining">Dining</a>
+                                                                                                <a asp-controller="Pages" asp-action="Experiences">Experiences</a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-lg-4 col-md-6">
+                                                                                            <h6 class="footer-heading">Private Offers</h6>
+                                                                                            <form class="subscribe-form" asp-controller="Pages" asp-action="Subscribe" method="post">
+                                                                                                <input type="email" name="email" placeholder="your@email.com" required
+                                                                                                       aria-label="Email for private offers" />
+                                                                                                <button type="submit" aria-label="Subscribe">&rarr;</button>
+                                                                                            </form>
+                                                                                            @if (TempData["SubscribeMessage"] != null)
+                                                                                            {
+                                                                                                <p class="subscribe-message">@TempData["SubscribeMessage"]</p>
+                                                                                            }
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-lg-2 col-md-6">
-                                                                                        <h6 class="footer-heading">Dining</h6>
-                                                                                        <div class="footer-links">
-                                                                                            <a asp-controller="Pages" asp-action="Dining">Dining</a>
-                                                                                            <a asp-controller="Pages" asp-action="Experiences">Experiences</a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-lg-4 col-md-6">
-                                                                                        <h6 class="footer-heading">Private Offers</h6>
-                                                                                        <form class="subscribe-form" asp-controller="Pages" asp-action="Subscribe" method="post">
-                                                                                            <input type="email" name="email" placeholder="your@email.com" required
-                                                                                                   aria-label="Email for private offers" />
-                                                                                            <button type="submit" aria-label="Subscribe">&rarr;</button>
-                                                                                        </form>
-                                                                                        @if (TempData["SubscribeMessage"] != null)
-                                                                                        {
-                                                                                            <p class="subscribe-message">@TempData["SubscribeMessage"]</p>
-                                                                                        }
+                                                                                </div>
+                                                                                <div class="footer-bottom">
+                                                                                    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+                                                                                        <p>&copy; 2026 Fernwood Heritage Retreat. All rights reserved.</p>
+                                                                                        <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="footer-bottom">
-                                                                                <div class="container d-flex justify-content-between align-items-center flex-wrap">
-                                                                                    <p>&copy; 2026 Fernwood Heritage Retreat. All rights reserved.</p>
-                                                                                    <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
-                                                                                </div>
-                                                                            </div>
-                                                                        </footer>
+                                                                            </footer>
 
-                                                                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-                                                                        <script src="~/js/site.js" asp-append-version="true"></script>
-                                                                        @await RenderSectionAsync("Scripts", required: false)
-                                                                    </body>
+                                                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                                                                            <script src="~/js/site.js" asp-append-version="true"></script>
+                                                                            @await RenderSectionAsync("Scripts", required: false)
+                                                                        </body>
 
-                                                                </html>
+                                                                    </html>

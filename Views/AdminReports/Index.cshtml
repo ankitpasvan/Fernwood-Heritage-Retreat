@@ -1,0 +1,123 @@
+@model IEnumerable<HotelBookingSystem.Models.Booking>
+@{
+    ViewData["Title"] = "Booking Reports";
+    var statuses = new[] { "", "Pending", "Confirmed", "CheckedIn", "CheckedOut", "Cancelled" };
+    string currentStatus = ViewBag.Status as string ?? "";
+}
+
+<div class="container py-5" style="margin-top: 70px;">
+    <h2 style="font-family: 'Playfair Display', serif;">Booking Reports</h2>
+    <p class="text-muted">Filter bookings by booking date and status. Download the filtered list as a CSV file (opens in
+        Excel).</p>
+
+        <form method="get" class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label class="form-label" for="from">From</label>
+                <input type="date" id="from" name="from" value="@ViewBag.From" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="to">To</label>
+                <input type="date" id="to" name="to" value="@ViewBag.To" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="status">Status</label>
+                <select id="status" name="status" class="form-select">
+                    @foreach (var s in statuses)
+                    {
+                        if (s == currentStatus)
+                        {
+                            <option value="@s" selected>@(s == "" ? "All statuses" : s)</option>
+                        }
+                        else
+                        {
+                            <option value="@s">@(s == "" ? "All statuses" : s)</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end gap-2">
+                <button type="submit" class="btn btn-heritage">Filter</button>
+                <a asp-action="ExportCsv" asp-route-from="@ViewBag.From" asp-route-to="@ViewBag.To"
+                   asp-route-status="@ViewBag.Status" class="btn btn-outline-secondary">Download CSV</a>
+            </div>
+        </form>
+
+        <div class="row g-3 mb-4">
+            <div class="col">
+                <div class="border rounded p-3 text-center">
+                    <div class="h5 mb-0">@ViewBag.TotalBookings</div>
+                    <small class="text-muted">Total Bookings</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border rounded p-3 text-center">
+                    <div class="h5 mb-0">₹@(((decimal)ViewBag.TotalRevenue).ToString("0.00"))</div>
+                    <small class="text-muted">Revenue</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border rounded p-3 text-center">
+                    <div class="h5 mb-0">@ViewBag.ConfirmedCount</div>
+                    <small class="text-muted">Confirmed</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border rounded p-3 text-center">
+                    <div class="h5 mb-0">@ViewBag.PendingCount</div>
+                    <small class="text-muted">Pending</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border rounded p-3 text-center">
+                    <div class="h5 mb-0">@ViewBag.CheckedInCount</div>
+                    <small class="text-muted">Checked In</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border rounded p-3 text-center">
+                    <div class="h5 mb-0">@ViewBag.CheckedOutCount</div>
+                    <small class="text-muted">Checked Out</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border rounded p-3 text-center">
+                    <div class="h5 mb-0">@ViewBag.CancelledCount</div>
+                    <small class="text-muted">Cancelled</small>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Booking Ref</th>
+                    <th>Guest</th>
+                    <th>Room</th>
+                    <th>Check-In</th>
+                    <th>Check-Out</th>
+                    <th>Guests</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr>
+                        <td>@b.BookingRef</td>
+                        <td>@b.User?.FullName</td>
+                        <td>@(b.Room?.RoomType?.Name) (@(b.Room?.RoomNumber))</td>
+                        <td>@b.CheckInDate.ToString("dd MMM yyyy")</td>
+                        <td>@b.CheckOutDate.ToString("dd MMM yyyy")</td>
+                        <td>@b.Guests</td>
+                        <td>₹@b.TotalAmount.ToString("0.00")</td>
+                        <td>@b.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (!Model.Any())
+        {
+            <p class="text-muted">No bookings found for the selected filters.</p>
+        }
+    </div>
