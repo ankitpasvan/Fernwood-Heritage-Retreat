@@ -57,17 +57,27 @@ public class AdminRoomTypesController : Controller
             ModelState.AddModelError("Name", "A room type with this name already exists.");
         }
 
+        var amenityIds = (selectedAmenities ?? Array.Empty<int>()).Distinct().ToList();
+        if (amenityIds.Count > 0)
+        {
+            int validCount = await _context.Amenities.CountAsync(a => amenityIds.Contains(a.AmenityId));
+            if (validCount != amenityIds.Count)
+            {
+                ModelState.AddModelError(string.Empty, "One or more selected amenities are invalid. Please choose amenities from the list.");
+            }
+        }
+
         if (!ModelState.IsValid)
         {
             ViewBag.Amenities = await _context.Amenities.OrderBy(a => a.Name).ToListAsync();
-            ViewBag.SelectedAmenities = selectedAmenities.ToList();
+            ViewBag.SelectedAmenities = amenityIds;
             return View(roomType);
         }
 
         _context.RoomTypes.Add(roomType);
         await _context.SaveChangesAsync();
 
-        foreach (int amenityId in selectedAmenities.Distinct())
+        foreach (int amenityId in amenityIds)
         {
             _context.RoomTypeAmenities.Add(new RoomTypeAmenity
             {
@@ -106,10 +116,20 @@ public class AdminRoomTypesController : Controller
             ModelState.AddModelError("Name", "A room type with this name already exists.");
         }
 
+        var amenityIds = (selectedAmenities ?? Array.Empty<int>()).Distinct().ToList();
+        if (amenityIds.Count > 0)
+        {
+            int validCount = await _context.Amenities.CountAsync(a => amenityIds.Contains(a.AmenityId));
+            if (validCount != amenityIds.Count)
+            {
+                ModelState.AddModelError(string.Empty, "One or more selected amenities are invalid. Please choose amenities from the list.");
+            }
+        }
+
         if (!ModelState.IsValid)
         {
             ViewBag.Amenities = await _context.Amenities.OrderBy(a => a.Name).ToListAsync();
-            ViewBag.SelectedAmenities = selectedAmenities.ToList();
+            ViewBag.SelectedAmenities = amenityIds;
             return View(roomType);
         }
 
@@ -130,7 +150,7 @@ public class AdminRoomTypesController : Controller
 
         var oldMappings = _context.RoomTypeAmenities.Where(rta => rta.RoomTypeId == id);
         _context.RoomTypeAmenities.RemoveRange(oldMappings);
-        foreach (int amenityId in selectedAmenities.Distinct())
+        foreach (int amenityId in amenityIds)
         {
             _context.RoomTypeAmenities.Add(new RoomTypeAmenity { RoomTypeId = id, AmenityId = amenityId });
         }
@@ -147,7 +167,7 @@ public class AdminRoomTypesController : Controller
             .FirstOrDefaultAsync(rt => rt.RoomTypeId == id);
         if (roomType == null) return NotFound();
         ViewBag.HasBookings = await _context.Bookings
-            .AnyAsync(b => b.Room.RoomTypeId == id);
+            .AnyAsync(b => b.Room != null && b.Room.RoomTypeId == id);
         return View(roomType);
     }
 
@@ -163,7 +183,7 @@ public class AdminRoomTypesController : Controller
         if (roomType.Rooms.Any())
         {
             ModelState.AddModelError(string.Empty, "Cannot delete this room type because rooms of this type exist. Delete the rooms first.");
-            ViewBag.HasBookings = await _context.Bookings.AnyAsync(b => b.Room.RoomTypeId == id);
+            ViewBag.HasBookings = await _context.Bookings.AnyAsync(b => b.Room != null && b.Room.RoomTypeId == id);
             return View(roomType);
         }
 

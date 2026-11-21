@@ -43,6 +43,16 @@ public class AdminRoomsController : Controller
             ModelState.AddModelError("RoomNumber", "A room with this number already exists.");
         }
 
+        if (!await _context.RoomTypes.AnyAsync(rt => rt.RoomTypeId == room.RoomTypeId))
+        {
+            ModelState.AddModelError("RoomTypeId", "Please choose a valid room type.");
+        }
+
+        if (!Statuses.Contains(room.Status))
+        {
+            ModelState.AddModelError("Status", "Please choose a valid status (Available, Maintenance or OutOfService).");
+        }
+
         if (!ModelState.IsValid)
         {
             ViewBag.RoomTypeId = new SelectList(await _context.RoomTypes.OrderBy(rt => rt.Name).ToListAsync(), "RoomTypeId", "Name", room.RoomTypeId);
@@ -74,6 +84,16 @@ public class AdminRoomsController : Controller
         if (await _context.Rooms.AnyAsync(r => r.RoomNumber == room.RoomNumber && r.RoomId != id))
         {
             ModelState.AddModelError("RoomNumber", "A room with this number already exists.");
+        }
+
+        if (!await _context.RoomTypes.AnyAsync(rt => rt.RoomTypeId == room.RoomTypeId))
+        {
+            ModelState.AddModelError("RoomTypeId", "Please choose a valid room type.");
+        }
+
+        if (!Statuses.Contains(room.Status))
+        {
+            ModelState.AddModelError("Status", "Please choose a valid status (Available, Maintenance or OutOfService).");
         }
 
         if (!ModelState.IsValid)
