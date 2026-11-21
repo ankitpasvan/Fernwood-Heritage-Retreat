@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelBookingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261121091156_AddContactEnquiries")]
+    [Migration("20261121125241_AddContactEnquiries")]
     partial class AddContactEnquiries
     {
         /// <inheritdoc />
@@ -178,6 +178,48 @@ namespace HotelBookingSystem.Migrations
 
                             t.HasCheckConstraint("CK_Booking_Status", "Status IN ('Pending', 'Confirmed', 'Cancelled', 'CheckedIn', 'CheckedOut', 'NoShow')");
                         });
+                });
+
+            modelBuilder.Entity("HotelBookingSystem.Models.ContactEnquiry", b =>
+                {
+                    b.Property<int>("ContactEnquiryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactEnquiryId"));
+
+                    b.Property<string>("City")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.HasKey("ContactEnquiryId");
+
+                    b.ToTable("ContactEnquiries");
                 });
 
             modelBuilder.Entity("HotelBookingSystem.Models.HotelProfile", b =>
