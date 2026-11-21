@@ -152,8 +152,7 @@ public class PaymentsController : Controller
             return RedirectToAction("Details", "Bookings", new { id = booking.BookingId });
         }
 
-        // Booking is now Confirmed and saved. Only now send the confirmation email.
-        // Email failure cannot break the booking: the service catches and logs it.
+
         var confirmedBooking = await _context.Bookings
             .Include(b => b.User)
             .Include(b => b.Room).ThenInclude(r => r!.RoomType)
