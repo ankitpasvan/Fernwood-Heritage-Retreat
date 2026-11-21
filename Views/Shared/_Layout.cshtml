@@ -16,6 +16,8 @@ isCurrent("Pages", "Faq");
     bool contactActive = isCurrent("Pages", "Contact");
     bool adminActive = navController.StartsWith("Admin", StringComparison.OrdinalIgnoreCase);
     bool accountActive = isCurrent("Bookings", "") || isCurrent("Payments", "") || isCurrent("Reviews", "MyReviews");
+    bool hasHero = homeActive || isCurrent("Rooms", "") || isCurrent("Pages", "") || isCurrent("Reviews", "Index") ||
+isCurrent("Reviews", "Create");
 }
 
 <head>
@@ -32,7 +34,7 @@ isCurrent("Pages", "Faq");
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light navbar-heritage sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-heritage fixed-top @(hasHero ? "" : "navbar-solid")">
             <div class="container">
                 <a class="navbar-brand brand" asp-controller="Home" asp-action="Index">
                     <span class="brand-mark">F</span> Fernwood <span class="brand-sub">Heritage Retreat</span>
@@ -167,7 +169,7 @@ isCurrent("Pages", "Faq");
                                                                                 </nav>
                                                                             </header>
 
-                                                                            <main role="main">
+                                                                            <main role="main" class="@(hasHero ? "" : "main-solid-nav")">
                                                                                 @RenderBody()
                                                                             </main>
 
