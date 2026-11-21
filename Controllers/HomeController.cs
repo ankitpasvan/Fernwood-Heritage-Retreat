@@ -58,7 +58,22 @@ public class HomeController : Controller
             });
         }
 
-        ViewBag.ReviewCount = await _context.Reviews.CountAsync(r => r.IsApproved);
+        var approvedReviews = _context.Reviews.Where(r => r.IsApproved);
+
+        ViewBag.ReviewCount = await approvedReviews.CountAsync();
+        ViewBag.AverageRating = await approvedReviews.AnyAsync()
+            ? await approvedReviews.AverageAsync(r => r.Rating)
+            : 0;
+
+        ViewBag.Reviews = await approvedReviews
+            .Include(r => r.Booking)
+                .ThenInclude(b => b!.User)
+            .Include(r => r.RoomType)
+            .OrderByDescending(r => r.CreatedAt)
+            .Take(6)
+            .ToListAsync();
+
+        ViewBag.Amenities = await _context.Amenities.OrderBy(a => a.Name).ToListAsync();
 
         return View(cards);
     }

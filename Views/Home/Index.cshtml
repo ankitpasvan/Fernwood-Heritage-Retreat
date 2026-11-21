@@ -2,151 +2,594 @@
 
 @{
     ViewData["Title"] = "Fernwood Heritage Retreat - Heritage Stay in Mussoorie Hills";
+    var reviews = ViewBag.Reviews as List<HotelBookingSystem.Models.Review>;
+    var amenities = ViewBag.Amenities as List<HotelBookingSystem.Models.Amenity>;
+    var reviewCount = (int)(ViewBag.ReviewCount ?? 0);
+    var avgRating = Convert.ToDouble(ViewBag.AverageRating ?? 0);
 }
 
-<!-- HERO -->
-<section class="hero" id="home">
-    <img class="hero-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80"
-         alt="Valley view from Fernwood Heritage Retreat" />
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-        <p class="hero-eyebrow">Mussoorie Hills &bull; Uttarakhand</p>
-        <h1>Fernwood Heritage Retreat</h1>
-        <p class="hero-tagline">A quiet heritage stay above the valley</p>
-        <p class="hero-sub">Old stone walls, wooden ceilings, valley views, homely food and bonfire evenings. Only a few
-            rooms - every stay feels personal.</p>
-            <div class="mt-4">
-                <a class="btn btn-heritage btn-lg me-2" href="#booking">Check Availability</a>
-                <a class="btn btn-outline-light btn-lg" asp-controller="Rooms" asp-action="Index">View Rooms</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- BOOKING BAR -->
-    <section id="booking" class="booking-bar-section">
-        <div class="container">
-            <form class="booking-bar card shadow" id="bookingForm" method="get" asp-controller="Rooms" asp-action="Search">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-2">
-                        <label class="form-label" for="checkIn">Check-in</label>
-                        <input class="form-control" type="date" id="checkIn" name="checkIn" required />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label" for="checkOut">Check-out</label>
-                        <input class="form-control" type="date" id="checkOut" name="checkOut" required />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label" for="guests">Guests</label>
-                        <select class="form-select" id="guests" name="guests">
-                            <option value="1">1 Guest</option>
-                            <option value="2" selected>2 Guests</option>
-                            <option value="3">3 Guests</option>
-                            <option value="4">4 Guests</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label" for="adults">Adults</label>
-                        <select class="form-select" id="adults" name="adults">
-                            <option value="1">1 Adult</option>
-                            <option value="2" selected>2 Adults</option>
-                            <option value="3">3 Adults</option>
-                            <option value="4">4 Adults</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label" for="children">Children</label>
-                        <select class="form-select" id="children" name="children">
-                            <option value="0" selected>0 Children</option>
-                            <option value="1">1 Child</option>
-                            <option value="2">2 Children</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-heritage w-100" type="submit">Check Availability</button>
+<!-- HERO CAROUSEL -->
+<section class="hero-carousel" id="heroCarousel" aria-roledescription="carousel" aria-label="Fernwood highlights">
+    <div class="hero-slides">
+        <div class="hero-slide active">
+            <img class="hero-slide-img" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80"
+                 alt="Valley view from Fernwood Heritage Retreat" />
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <p class="hero-eyebrow">Mussoorie Hills &bull; Uttarakhand</p>
+                <h1>Fernwood Heritage Retreat</h1>
+                <p class="hero-tagline">A quiet heritage stay above the valley</p>
+                <p class="hero-sub">Old stone walls, wooden ceilings, valley views, homely food and bonfire evenings.
+                    Only a few rooms - every stay feels personal.</p>
+                    <div class="mt-4">
+                        <a class="btn btn-gold btn-lg me-2" href="#booking">Book Your Stay</a>
+                        <a class="btn btn-outline-light btn-lg" asp-controller="Rooms" asp-action="Index">Explore Rooms</a>
                     </div>
                 </div>
-                <p id="bookingBarError" class="text-danger small mt-2 mb-0" style="display:none;"></p>
-                <p id="bookingBarSuccess" class="text-success small mt-2 mb-0" style="display:none;"></p>
-                <p class="text-muted small mt-2 mb-0">Check-in 2:00 PM &bull; Check-out 11:00 AM &bull; Free cancellation on
-                    selected plans. Availability is checked from the database - no double booking.</p>
-                </form>
             </div>
-        </section>
-
-        <!-- ABOUT TEASER -->
-        <section class="section fade-in">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <p class="section-eyebrow">Our Story</p>
-                        <h2 class="section-title">A heritage home,<br />not a hotel chain.</h2>
-                        <p>Fernwood began as a quiet hill home with thick stone walls and wooden ceilings. Over the years it
-                            became a small boutique stay - restored with care, never rebuilt as a modern hotel. That is why
-                            every room is different, and every stay feels personal.</p>
-                            <a class="btn btn-outline-heritage me-2" asp-controller="Pages" asp-action="About">Read Our Story</a>
-                            <a class="btn btn-outline-heritage" asp-controller="Pages" asp-action="Gallery">See The Gallery</a>
+            <div class="hero-slide">
+                <img class="hero-slide-img" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1920&q=80"
+                     alt="Suite at Fernwood Heritage Retreat" />
+                <div class="hero-overlay"></div>
+                <div class="container hero-content">
+                    <p class="hero-eyebrow">Rooms &amp; Suites</p>
+                    <h1>Wake up above the clouds.</h1>
+                    <p class="hero-tagline">Six one-of-a-kind rooms &amp; suites</p>
+                    <p class="hero-sub">Each room has its own view, its own character, and prices from ₹2,800 a night. No
+                        two stays feel the same.</p>
+                        <div class="mt-4">
+                            <a class="btn btn-gold btn-lg me-2" href="#booking">Book Your Stay</a>
+                            <a class="btn btn-outline-light btn-lg" asp-controller="Rooms" asp-action="Index">View Rooms</a>
                         </div>
-                        <div class="col-md-6 mt-4 mt-md-0">
-                            <img class="img-fluid rounded shadow img-zoom"
-                                 src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80"
-                                 alt="Fernwood Heritage Retreat exterior" />
-                            <div class="row mt-3">
-                                <div class="col-4">
-                                    <div class="stat-card"><strong>@(Model?.Count ?? 0)</strong><span>Room Types</span></div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat-card"><strong>@(Model?.Sum(r => r.AvailableRooms) ?? 0)</strong><span>Rooms
-                                        Available</span></div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat-card"><strong>@ViewBag.ReviewCount</strong><span>Guest Reviews</span></div>
-                                    </div>
+                    </div>
+                </div>
+                <div class="hero-slide">
+                    <img class="hero-slide-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1920&q=80"
+                         alt="Dining at Fernwood Heritage Retreat" />
+                    <div class="hero-overlay"></div>
+                    <div class="container hero-content">
+                        <p class="hero-eyebrow">Dining &amp; Evenings</p>
+                        <h1>Homely food, bonfire evenings.</h1>
+                        <p class="hero-tagline">Slow mornings, quiet walks, evenings by the fire</p>
+                        <p class="hero-sub">Tea on the terrace, homely food, and evenings by the bonfire with the valley lights
+                            below.</p>
+                            <div class="mt-4">
+                                <a class="btn btn-gold btn-lg me-2" href="#booking">Book Your Stay</a>
+                                <a class="btn btn-outline-light btn-lg" asp-controller="Pages" asp-action="Dining">Explore
+                                    Dining</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <button class="hero-control hero-prev" type="button" aria-label="Previous slide">&lsaquo;</button>
+                    <button class="hero-control hero-next" type="button" aria-label="Next slide">&rsaquo;</button>
+                    <div class="hero-indicators">
+                        <button type="button" class="active" aria-label="Go to slide 1" aria-current="true"></button>
+                        <button type="button" aria-label="Go to slide 2" aria-current="false"></button>
+                        <button type="button" aria-label="Go to slide 3" aria-current="false"></button>
+                    </div>
                 </section>
 
-                <!-- ROOMS TEASER -->
-                <section class="section section-cream fade-in" id="rooms">
+                <!-- BOOKING BAR -->
+                <section id="booking" class="booking-bar-section">
                     <div class="container">
-                        <p class="section-eyebrow text-center">Rooms &amp; Suites</p>
-                        <h2 class="section-title text-center">Choose your room.</h2>
-                        <p class="text-center text-muted mb-4">Prices are per night. Breakfast is chargeable unless mentioned in your
-                            plan.</p>
-                            <div class="row">
-                                @if (Model != null && Model.Any())
-                                {
-                                    @foreach (var room in Model)
-                                    {
-                                        <div class="col-md-4 mb-4">
-                                            <div class="card room-card h-100">
-                                                <img src="@(string.IsNullOrEmpty(room.ImageUrl) ? "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" : room.ImageUrl)"
-                                                     class="card-img-top" alt="@room.Name" />
-                                                <div class="card-body d-flex flex-column">
-                                                    <h5 class="card-title">@room.Name</h5>
-                                                    <p class="text-muted small mb-2">@room.SizeSqFt sq.ft &bull; @room.BedType &bull; @room.ViewType
-                                                        &bull; Up to @room.MaxGuests guests</p>
-                                                        <p class="card-text flex-grow-1">@room.Description</p>
-                                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                                            <div><strong class="price">₹@(room.PricePerNight.ToString("N0"))</strong><span
-                                                                class="text-muted small"> / night</span></div>
-                                                                <a class="btn btn-heritage btn-sm" asp-controller="Rooms" asp-action="Details"
-                                                                   asp-route-id="@room.RoomTypeId">View Details</a>
-                                                            </div>
-                                                            <p class="text-muted small mt-2 mb-0">@room.AvailableRooms room(s) available</p>
-                                                        </div>
+                        <form class="booking-bar card shadow" id="bookingForm" method="get" asp-controller="Rooms" asp-action="Search">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-2">
+                                    <label class="form-label" for="checkIn">Check-in</label>
+                                    <input class="form-control" type="date" id="checkIn" name="checkIn" required />
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label" for="checkOut">Check-out</label>
+                                    <input class="form-control" type="date" id="checkOut" name="checkOut" required />
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label" for="guests">Guests</label>
+                                    <select class="form-select" id="guests" name="guests">
+                                        <option value="1">1 Guest</option>
+                                        <option value="2" selected>2 Guests</option>
+                                        <option value="3">3 Guests</option>
+                                        <option value="4">4 Guests</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label" for="adults">Adults</label>
+                                    <select class="form-select" id="adults" name="adults">
+                                        <option value="1">1 Adult</option>
+                                        <option value="2" selected>2 Adults</option>
+                                        <option value="3">3 Adults</option>
+                                        <option value="4">4 Adults</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label" for="children">Children</label>
+                                    <select class="form-select" id="children" name="children">
+                                        <option value="0" selected>0 Children</option>
+                                        <option value="1">1 Child</option>
+                                        <option value="2">2 Children</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-heritage w-100" type="submit">Check Availability</button>
+                                </div>
+                            </div>
+                            <p id="bookingBarError" class="text-danger small mt-2 mb-0" style="display:none;"></p>
+                            <p id="bookingBarSuccess" class="text-success small mt-2 mb-0" style="display:none;"></p>
+                            <p class="text-muted small mt-2 mb-0">Check-in 2:00 PM &bull; Check-out 11:00 AM &bull; Free cancellation
+                                before check-in date. Availability is checked from the database - no double booking.</p>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- WELCOME / OUR STORY -->
+                    <section class="section fade-in">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <p class="section-eyebrow">Welcome</p>
+                                    <h2 class="section-title">A heritage home,<br />not a hotel chain.</h2>
+                                    <p>Fernwood began as a quiet hill home with thick stone walls and wooden ceilings. Over the years it
+                                        became a small boutique stay - restored with care, never rebuilt as a modern hotel. That is why
+                                        every room is different, and every stay feels personal.</p>
+                                        <p>Morning starts with tea on the terrace and the valley slowly opening up. Afternoons are for a short
+                                            walk to the waterfall or coffee at our glass-floor cafe. Evenings belong to the bonfire, with the
+                                            valley lights below.</p>
+                                            <ul class="list-check">
+                                                <li>Restored with care, never rebuilt as a modern hotel</li>
+                                                <li>Every room is different - no two stays feel the same</li>
+                                                <li>Homely food, valley views and bonfire evenings</li>
+                                            </ul>
+                                            <a class="btn btn-outline-heritage me-2" asp-controller="Pages" asp-action="About">Read Our Story</a>
+                                            <a class="btn btn-outline-heritage" asp-controller="Pages" asp-action="Gallery">See The Gallery</a>
+                                        </div>
+                                        <div class="col-md-6 mt-4 mt-md-0">
+                                            <img class="img-fluid rounded shadow img-zoom"
+                                                 src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80"
+                                                 alt="Fernwood Heritage Retreat exterior" />
+                                            <div class="row mt-3">
+                                                <div class="col-4">
+                                                    <div class="stat-card"><strong>@(Model?.Count ?? 0)</strong><span>Room Types</span></div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="stat-card"><strong>@(Model?.Sum(r => r.AvailableRooms) ?? 0)</strong><span>Rooms
+                                                        Available</span></div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="stat-card"><strong>@reviewCount</strong><span>Guest Reviews</span></div>
                                                     </div>
                                                 </div>
-                                            }
-                                        }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <!-- ROOMS & SUITES -->
+                                <section class="section section-cream fade-in" id="rooms">
+                                    <div class="container">
+                                        <div class="section-head">
+                                            <p class="section-eyebrow">Rooms &amp; Suites</p>
+                                            <h2 class="section-title">Choose your room.</h2>
+                                            <p class="text-muted">Prices are per night. Breakfast is chargeable unless mentioned in your plan.</p>
+                                        </div>
+                                        <div class="row">
+                                            @if (Model != null && Model.Any())
+                                            {
+                                                @foreach (var room in Model)
+                                                {
+                                                    <div class="col-md-4 mb-4">
+                                                        <div class="card room-card home-room-card h-100">
+                                                            <img src="@(string.IsNullOrEmpty(room.ImageUrl) ? "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" : room.ImageUrl)"
+                                                                 class="card-img-top" alt="@room.Name" />
+                                                            <div class="card-body d-flex flex-column">
+                                                                @if (!string.IsNullOrEmpty(room.ViewType))
+                                                                {
+                                                                    <p class="room-category">@room.ViewType</p>
+                                                                }
+                                                                <h5 class="card-title">@room.Name</h5>
+                                                                <p class="text-muted small mb-2">@room.SizeSqFt sq.ft &bull; @room.BedType &bull; Up to
+                                                                    @room.MaxGuests guests</p>
+                                                                    <p class="card-text flex-grow-1">@room.Description</p>
+                                                                    @if (room.AmenityNames != null && room.AmenityNames.Any())
+                                                                    {
+                                                                        <p class="text-muted small mb-2">@string.Join(" • ", room.AmenityNames.Take(3))</p>
+                                                                    }
+                                                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                                                        <div><span class="text-muted small">From</span> <strong
+                                                                            class="price">₹@(room.PricePerNight.ToString("N0"))</strong><span
+                                                                            class="text-muted small"> / night</span></div>
+                                                                        </div>
+                                                                        <div class="d-flex gap-2 mt-3">
+                                                                            <a class="btn btn-heritage btn-sm flex-grow-1" asp-controller="Rooms" asp-action="Details"
+                                                                               asp-route-id="@room.RoomTypeId">Book Now</a>
+                                                                            <a class="btn btn-outline-heritage btn-sm flex-grow-1" asp-controller="Rooms"
+                                                                               asp-action="Details" asp-route-id="@room.RoomTypeId">View Details</a>
+                                                                        </div>
+                                                                        <p class="text-muted small mt-2 mb-0">@room.AvailableRooms room(s) available</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
             else
-                                        {
-                                            <p class="text-center text-muted">No rooms available right now. Please check back soon.</p>
-                                        }
-                                    </div>
-                                    <div class="text-center mt-2">
-                                        <a class="btn btn-outline-heritage" asp-controller="Rooms" asp-action="Index">View All Rooms</a>
-                                    </div>
-                                </div>
-                            </section>
+                                                    {
+                                                        <p class="text-center text-muted">No rooms available right now. Please check back soon.</p>
+                                                    }
+                                                </div>
+                                                <div class="text-center mt-2">
+                                                    <a class="link-arrow" asp-controller="Rooms" asp-action="Index">View All Rooms &rarr;</a>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <!-- EXPERIENCES -->
+                                        <section class="section fade-in">
+                                            <div class="container">
+                                                <div class="section-head">
+                                                    <p class="section-eyebrow">Experiences</p>
+                                                    <h2 class="section-title">Slow mornings, quiet evenings.</h2>
+                                                    <p class="text-muted">Fernwood is not about rushing from one sight to another. It is about slow mornings,
+                                                        quiet walks and evenings by the fire.</p>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3 mb-4">
+                                                            <div class="exp-tall">
+                                                                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+                                                                     alt="Bonfire evening at Fernwood" />
+                                                                <div class="exp-tall-body">
+                                                                    <p class="exp-tall-eyebrow">Evenings</p>
+                                                                    <h5>Bonfire Evenings</h5>
+                                                                    <p>Evening bonfire with valley lights below, on request and weather permitting.</p>
+                                                                    <a class="exp-tall-link" asp-controller="Pages" asp-action="Experiences">Explore Experiences
+                                                                        &rarr;</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 mb-4">
+                                                                <div class="exp-tall">
+                                                                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
+                                                                         alt="Mountain valley near Fernwood" />
+                                                                    <div class="exp-tall-body">
+                                                                        <p class="exp-tall-eyebrow">Mornings</p>
+                                                                        <h5>Nature Walk</h5>
+                                                                        <p>Guided morning walk to the waterfall and nearby trails through oak and deodar.</p>
+                                                                        <a class="exp-tall-link" asp-controller="Pages" asp-action="Experiences">Explore Experiences
+                                                                            &rarr;</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-3 mb-4">
+                                                                    <div class="exp-tall">
+                                                                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
+                                                                             alt="Breakfast at Fernwood" />
+                                                                        <div class="exp-tall-body">
+                                                                            <p class="exp-tall-eyebrow">Mornings</p>
+                                                                            <h5>Yoga &amp; Terrace Breakfast</h5>
+                                                                            <p>Start the day with gentle yoga and breakfast on the terrace.</p>
+                                                                            <a class="exp-tall-link" asp-controller="Pages" asp-action="Experiences">Explore Experiences
+                                                                                &rarr;</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3 mb-4">
+                                                                        <div class="exp-tall">
+                                                                            <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
+                                                                                 alt="Cozy sit-out at Fernwood" />
+                                                                            <div class="exp-tall-body">
+                                                                                <p class="exp-tall-eyebrow">Afternoons</p>
+                                                                                <h5>Library &amp; Indoor Games</h5>
+                                                                                <p>Cozy sit-outs, books, board games and quiet corners for slow afternoons.</p>
+                                                                                <a class="exp-tall-link" asp-controller="Pages" asp-action="Experiences">Explore Experiences
+                                                                                    &rarr;</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <p class="text-center text-muted small">To add an experience to your stay, mention it while booking or ask at
+                                                                        reception. The bonfire is arranged at an additional charge, subject to weather conditions.</p>
+                                                                    </div>
+                                                                </section>
+
+                                                                <!-- WHY CHOOSE US -->
+                                                                <section class="section section-cream fade-in">
+                                                                    <div class="container">
+                                                                        <div class="section-head">
+                                                                            <p class="section-eyebrow">Why Fernwood</p>
+                                                                            <h2 class="section-title">Considered comforts.</h2>
+                                                                            <p class="text-muted">The small things, done well.</p>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4 mb-4">
+                                                                                <div class="why-item">
+                                                                                    <span class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                                stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">
+                                                                                        <path d="M3 18 L9 7 L13 13 L16 9 L21 18 Z" />
+                                                                                    </svg></span>
+                                                                                    <h3>Valley View</h3>
+                                                                                    <p class="text-muted">Wake up to the valley from your room.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-4">
+                                                                                <div class="why-item">
+                                                                                    <span class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                                stroke-linecap="round" aria-hidden="true">
+                                                                                        <path d="M4 10a12 12 0 0 1 16 0" />
+                                                                                        <path d="M7 13.5a8 8 0 0 1 10 0" />
+                                                                                        <path d="M10 17a4 4 0 0 1 4 0" />
+                                                                                        <circle cx="12" cy="19.5" r="1" fill="currentColor" stroke="none" />
+                                                                                    </svg></span>
+                                                                                    <h3>Wi-Fi</h3>
+                                                                                    <p class="text-muted">Stay connected throughout the stay.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-4">
+                                                                                <div class="why-item">
+                                                                                    <span class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                                aria-hidden="true">
+                                                                                        <rect x="4" y="4" width="16" height="16" rx="3" /><text x="12" y="16.5" text-anchor="middle"
+                                                                                                                                                font-size="11" font-family="Georgia, serif" fill="currentColor" stroke="none">P</text>
+                                                                                    </svg></span>
+                                                                                    <h3>Free Parking</h3>
+                                                                                    <p class="text-muted">Free parking, included with every stay.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-4">
+                                                                                <div class="why-item">
+                                                                                    <span class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                                stroke-linecap="round" aria-hidden="true">
+                                                                                        <path d="M4 16a8 8 0 0 1 16 0" />
+                                                                                        <line x1="2" y1="19" x2="22" y2="19" />
+                                                                                        <circle cx="12" cy="7" r="1" fill="currentColor" stroke="none" />
+                                                                                    </svg></span>
+                                                                                    <h3>In-Room Dining</h3>
+                                                                                    <p class="text-muted">Homely food, served in your room.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-4">
+                                                                                <div class="why-item">
+                                                                                    <span class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                                stroke-linejoin="round" aria-hidden="true">
+                                                                                        <path d="M12 3 C15 8 18 10 18 14 a6 6 0 1 1 -12 0 C6 10 9 8 12 3 Z" />
+                                                                                    </svg></span>
+                                                                                    <h3>Bonfire</h3>
+                                                                                    <p class="text-muted">Evenings by the fire, on request and weather permitting.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-4">
+                                                                                <div class="why-item">
+                                                                                    <span class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                                stroke-linejoin="round" aria-hidden="true">
+                                                                                        <path d="M12 3 L13.5 9.5 L20 12 L13.5 14.5 L12 21 L10.5 14.5 L4 12 L10.5 9.5 Z" />
+                                                                                    </svg></span>
+                                                                                    <h3>Daily Housekeeping</h3>
+                                                                                    <p class="text-muted">Fresh rooms, every day.</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+
+                                                                <!-- AMENITIES -->
+                                                                <section class="section fade-in">
+                                                                    <div class="container">
+                                                                        <div class="section-head">
+                                                                            <p class="section-eyebrow">Amenities</p>
+                                                                            <h2 class="section-title">Everything you need.</h2>
+                                                                            <p class="text-muted">Across our rooms and suites.</p>
+                                                                        </div>
+                                                                        @if (amenities != null && amenities.Any())
+                                                                        {
+                                                                            <div class="amenity-panel">
+                                                                                <ul class="amenity-list">
+                                                                                    @foreach (var amenity in amenities)
+                                                                                    {
+                                                                                        <li>@amenity.Name</li>
+                                                                                    }
+                                                                                </ul>
+                                                                            </div>
+                                                                        }
+                                                                        <div class="text-center mt-4">
+                                                                            <a class="link-arrow" asp-controller="Rooms" asp-action="Index">See All Rooms &rarr;</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </section>
+
+                                                                <!-- SPECIAL OFFERS -->
+                                                                <section class="section section-cream fade-in">
+                                                                    <div class="container">
+                                                                        <div class="section-head">
+                                                                            <p class="section-eyebrow">Special Offers</p>
+                                                                            <h2 class="section-title">Good to know before you book.</h2>
+                                                                            <p class="text-muted">Real benefits, plainly stated.</p>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4 mb-4">
+                                                                                <div class="card offer-card h-100">
+                                                                                    <div class="card-body">
+                                                                                        <span class="offer-tag">Best Rate</span>
+                                                                                        <h3>Honest pricing, no surprises</h3>
+                                                                                        <p class="text-muted">The price you see is the price you pay. No taxes, no hidden charges - your
+                                                                                            total is the nightly rate times the number of nights.</p>
+                                                                                            <a class="link-arrow" asp-controller="Rooms" asp-action="Index">View Rooms &rarr;</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-md-4 mb-4">
+                                                                                    <div class="card offer-card h-100">
+                                                                                        <div class="card-body">
+                                                                                            <span class="offer-tag">Included</span>
+                                                                                            <h3>Free parking, every stay</h3>
+                                                                                            <p class="text-muted">Free parking is included with every stay at Fernwood. Arrive by car and
+                                                                                                park
+                                                                                                without a second thought.</p>
+                                                                                                <a class="link-arrow" asp-controller="Rooms" asp-action="Index">View Rooms &rarr;</a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-4 mb-4">
+                                                                                        <div class="card offer-card h-100">
+                                                                                            <div class="card-body">
+                                                                                                <span class="offer-tag">Flexible</span>
+                                                                                                <h3>Easy cancellation</h3>
+                                                                                                <p class="text-muted">Cancel a Pending or Confirmed booking from My Bookings before your
+                                                                                                    check-in
+                                                                                                    date.</p>
+                                                                                                    <a class="link-arrow" asp-controller="Bookings" asp-action="MyBookings">My Bookings &rarr;</a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </section>
+
+                                                                            <!-- GALLERY -->
+                                                                            <section class="section fade-in">
+                                                                                <div class="container">
+                                                                                    <div class="section-head">
+                                                                                        <p class="section-eyebrow">Gallery</p>
+                                                                                        <h2 class="section-title">A small look before you arrive.</h2>
+                                                                                        <p class="text-muted">Rooms, dining, valley views and quiet corners.</p>
+                                                                                    </div>
+                                                                                    <div class="row g-3">
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="gallery-tile">
+                                                                                                <img class="gallery-img"
+                                                                                                     src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+                                                                                                     alt="Hotel exterior" />
+                                                                                                <span class="gallery-caption">Hotel Exterior</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="gallery-tile">
+                                                                                                <img class="gallery-img"
+                                                                                                     src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80" alt="Room" />
+                                                                                                <span class="gallery-caption">Room</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="gallery-tile">
+                                                                                                <img class="gallery-img"
+                                                                                                     src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Dining" />
+                                                                                                <span class="gallery-caption">Dining</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="gallery-tile">
+                                                                                                <img class="gallery-img"
+                                                                                                     src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"
+                                                                                                     alt="Valley view" />
+                                                                                                <span class="gallery-caption">Valley View</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="gallery-tile">
+                                                                                                <img class="gallery-img"
+                                                                                                     src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
+                                                                                                     alt="Deluxe room" />
+                                                                                                <span class="gallery-caption">Deluxe Room</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="gallery-tile">
+                                                                                                <img class="gallery-img"
+                                                                                                     src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&q=80" alt="Suite" />
+                                                                                                <span class="gallery-caption">Suite</span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="text-center mt-4">
+                                                                                        <a class="link-arrow" asp-controller="Pages" asp-action="Gallery">Explore All &rarr;</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </section>
+
+                                                                            <!-- GUEST REVIEWS -->
+                                                                            <section class="section section-cream fade-in">
+                                                                                <div class="container">
+                                                                                    <div class="section-head">
+                                                                                        <p class="section-eyebrow">Guest Reviews</p>
+                                                                                        <h2 class="section-title">In their words.</h2>
+                                                                                        @if (reviewCount > 0)
+                                                                                        {
+                                                                                            <p class="text-muted"><span class="stars">@for (var s = 1; s <= 5; s++) {
+                                                                                                @(s <= Math.Round(avgRating) ? "★"         : "☆")
+                                                                                            }
+                                                                                        </span> @avgRating.ToString("0.0") / 5 &mdash; Based on @reviewCount guest
+                                                                                        review@(reviewCount == 1 ? "" : "s")</p>
+                                                                                    }
+            else
+                                                                                    {
+                                                                                        <p class="text-muted">Real reviews from guests who stayed with us.</p>
+                                                                                    }
+                                                                                </div>
+                                                                                @if (reviews != null && reviews.Any())
+                                                                                {
+                                                                                    <div class="row">
+                                                                                        @foreach (var review in reviews)
+                                                                                        {
+                                                                                            <div class="col-md-4 mb-4">
+                                                                                                <div class="card review-card h-100">
+                                                                                                    <div class="card-body">
+                                                                                                        <p class="stars mb-2">@for (var s = 1; s <= 5; s++) {
+                                                                                                            @(s <= review.Rating ? "★" : "☆")
+                                                                                                        }
+                                                                                                    </p>
+                                                                                                    <h5 class="review-quote">@review.Title</h5>
+                                                                                                    <p class="text-muted">@review.Comment</p>
+                                                                                                    <p class="review-meta mb-0">@(review.Booking?.User?.FullName ?? "Verified Guest") &bull;
+                                                                                                        @(review.RoomType?.Name ?? "Fernwood")</p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <div class="row justify-content-center">
+                                                                                        <div class="col-md-6">
+                                                                                            <div class="card review-card">
+                                                                                                <div class="card-body text-center">
+                                                                                                    <p class="text-muted mb-3">No guest reviews yet. After a stay, guests can share their experience
+                                                                                                        here.</p>
+                                                                                                        <a class="btn btn-outline-heritage" asp-controller="Reviews" asp-action="MyReviews">Write a
+                                                                                                            Review</a>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+                                                                                        <div class="text-center mt-2">
+                                                                                            <a class="link-arrow" asp-controller="Reviews" asp-action="Index">Read All Reviews &rarr;</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </section>
+
+                                                                                <!-- LOCATION -->
+                                                                                <section class="section fade-in">
+                                                                                    <div class="container">
+                                                                                        <div class="row align-items-center">
+                                                                                            <div class="col-md-5">
+                                                                                                <p class="section-eyebrow">Find Us</p>
+                                                                                                <h2 class="section-title">Visit Fernwood.</h2>
+                                                                                                <p class="text-muted">Fernwood Estate, Jharipani Road, Mussoorie Hills, Mussoorie, Uttarakhand</p>
+                                                                                                <p class="mb-1"><strong>Phone:</strong> +91 98765 43210</p>
+                                                                                                <p class="mb-1"><strong>Email:</strong> stay@fernwoodheritage.in</p>
+                                                                                                <p class="mb-1"><strong>Check-in:</strong> 2:00 PM &nbsp;&bull;&nbsp; <strong>Check-out:</strong> 11:00
+                                                                                                    AM</p>
+                                                                                                    <p class="text-muted">Jolly Grant Airport, Dehradun - approx. 60 km. Dehradun Railway Station - approx.
+                                                                                                        25 km.</p>
+                                                                                                        <div class="mt-4">
+                                                                                                            <a class="btn btn-gold me-2"
+                                                                                                               href="https://www.google.com/maps/search/?api=1&query=Jharipani+Road+Mussoorie+Uttarakhand"
+                                                                                                               target="_blank" rel="noopener">Get Directions</a>
+                                                                                                            <a class="btn btn-outline-heritage" asp-controller="Pages" asp-action="Contact">Contact Us</a>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-md-7 mt-4 mt-md-0">
+                                                                                                        <iframe class="location-map" title="Map - Fernwood Heritage Retreat" loading="lazy"
+                                                                                                                referrerpolicy="no-referrer-when-downgrade"
+                                                                                                                src="https://www.google.com/maps?q=Jharipani+Road,+Mussoorie,+Uttarakhand&output=embed"></iframe>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </section>

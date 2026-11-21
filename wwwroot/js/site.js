@@ -104,3 +104,77 @@ if (fadeElements.length > 0) {
     });
   }
 }
+
+// ---------- Hero carousel: 3 slides, 30s auto-advance, pause on hover ----------
+var heroCarousel = document.getElementById("heroCarousel");
+
+if (heroCarousel) {
+  var heroSlides = heroCarousel.querySelectorAll(".hero-slide");
+  var heroDots = heroCarousel.querySelectorAll(".hero-indicators button");
+  var heroPrev = heroCarousel.querySelector(".hero-prev");
+  var heroNext = heroCarousel.querySelector(".hero-next");
+  var heroIndex = 0;
+  var heroTimer = null;
+  var heroDelay = 30000;
+  var reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  function showHeroSlide(index) {
+    heroIndex = (index + heroSlides.length) % heroSlides.length;
+    heroSlides.forEach(function (slide, i) {
+      slide.classList.toggle("active", i === heroIndex);
+    });
+    heroDots.forEach(function (dot, i) {
+      dot.classList.toggle("active", i === heroIndex);
+      dot.setAttribute("aria-current", i === heroIndex ? "true" : "false");
+    });
+  }
+
+  function startHeroTimer() {
+    stopHeroTimer();
+    if (!reduceMotion && heroSlides.length > 1 && !document.hidden) {
+      heroTimer = setInterval(function () {
+        showHeroSlide(heroIndex + 1);
+      }, heroDelay);
+    }
+  }
+
+  function stopHeroTimer() {
+    if (heroTimer) {
+      clearInterval(heroTimer);
+      heroTimer = null;
+    }
+  }
+
+  if (heroPrev) {
+    heroPrev.addEventListener("click", function () {
+      showHeroSlide(heroIndex - 1);
+      startHeroTimer();
+    });
+  }
+  if (heroNext) {
+    heroNext.addEventListener("click", function () {
+      showHeroSlide(heroIndex + 1);
+      startHeroTimer();
+    });
+  }
+  heroDots.forEach(function (dot, i) {
+    dot.addEventListener("click", function () {
+      showHeroSlide(i);
+      startHeroTimer();
+    });
+  });
+
+  heroCarousel.addEventListener("mouseenter", stopHeroTimer);
+  heroCarousel.addEventListener("mouseleave", startHeroTimer);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+      stopHeroTimer();
+    } else {
+      startHeroTimer();
+    }
+  });
+
+  startHeroTimer();
+}
