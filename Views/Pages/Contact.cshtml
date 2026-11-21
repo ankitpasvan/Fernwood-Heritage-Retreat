@@ -1,8 +1,4 @@
-@*
-    NOTE: The contact form currently shows a confirmation message using site.js only.
-    Enquiries are NOT saved to the database yet.
-    Backend (ContactEnquiries table + save + admin view) is planned for Batch 7.
-*@
+@model HotelBookingSystem.Models.ContactEnquiry
 @{
     ViewData["Title"] = "Contact - Fernwood Heritage Retreat";
 }
@@ -42,36 +38,42 @@
                     <div class="col-md-7">
                         <div class="card shadow">
                             <div class="card-body p-4">
+                                @if (TempData["SuccessMessage"] != null)
+                                {
+                                    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                                }
                                 <h5 class="card-title mb-3">Send an enquiry</h5>
-                                <form id="contactForm">
+                                <form asp-controller="Pages" asp-action="Contact" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="contactName">Enter Name</label>
-                                            <input class="form-control" type="text" id="contactName" name="contactName"
-                                                   required />
+                                            <label class="form-label" asp-for="Name">Enter Name</label>
+                                            <input class="form-control" asp-for="Name" />
+                                            <span class="text-danger" asp-validation-for="Name"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="contactEmail">Enter Email</label>
-                                            <input class="form-control" type="email" id="contactEmail" name="contactEmail"
-                                                   required />
+                                            <label class="form-label" asp-for="Email">Enter Email</label>
+                                            <input class="form-control" asp-for="Email" />
+                                            <span class="text-danger" asp-validation-for="Email"></span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="contactPhone">Enter Phone Number</label>
-                                            <input class="form-control" type="tel" id="contactPhone" name="contactPhone" />
+                                            <label class="form-label" asp-for="Phone">Enter Phone Number</label>
+                                            <input class="form-control" asp-for="Phone" />
+                                            <span class="text-danger" asp-validation-for="Phone"></span>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label" for="contactCity">Enter City</label>
-                                            <input class="form-control" type="text" id="contactCity" name="contactCity" />
+                                            <label class="form-label" asp-for="City">Enter City</label>
+                                            <input class="form-control" asp-for="City" />
+                                            <span class="text-danger" asp-validation-for="City"></span>
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label" for="contactMessage">Write Message to us!</label>
-                                        <textarea class="form-control" id="contactMessage" name="contactMessage" rows="4"
-                                                  required></textarea>
+                                        <label class="form-label" asp-for="Message">Write Message to us!</label>
+                                        <textarea class="form-control" asp-for="Message" rows="4"></textarea>
+                                        <span class="text-danger" asp-validation-for="Message"></span>
                                     </div>
-                                    <p id="contactSuccess" class="text-success small mt-2 mb-3" style="display:none;"></p>
                                     <button class="btn btn-heritage w-100" type="submit">SEND</button>
                                 </form>
                             </div>
@@ -80,3 +82,7 @@
                 </div>
             </div>
         </section>
+
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+        }

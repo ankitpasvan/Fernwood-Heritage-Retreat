@@ -1,0 +1,93 @@
+@model IEnumerable<HotelBookingSystem.Models.ContactEnquiry>
+@{
+    ViewData["Title"] = "Enquiries - Fernwood Heritage Retreat";
+}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+    <img class="page-banner-img" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80"
+         alt="Fernwood Heritage Retreat exterior" />
+    <div class="page-banner-overlay"></div>
+    <div class="container page-banner-content">
+        <h1 class="page-banner-title">Enquiries</h1>
+        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; Enquiries</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        @if (ViewBag.UnreadCount != null && (int)ViewBag.UnreadCount > 0)
+        {
+            <div class="alert alert-warning">@ViewBag.UnreadCount unread enquiries.</div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <h4>No enquiries yet</h4>
+                <p class="text-muted">Messages sent from the Contact page will appear here.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>City</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")</td>
+                                <td>@item.Name</td>
+                                <td>@item.Email</td>
+                                <td>@(item.Phone ?? "-")</td>
+                                <td>@(item.City ?? "-")</td>
+                                <td>@item.Message</td>
+                                <td>
+                                    @if (item.IsRead)
+                                    {
+                                        <span class="badge bg-secondary">Read</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">Unread</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!item.IsRead)
+                                    {
+                                        <form asp-controller="AdminEnquiries" asp-action="MarkRead"
+                                              asp-route-id="@item.ContactEnquiryId" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-heritage">Mark as read</button>
+                                        </form>
+                                    }
+                                    <form asp-controller="AdminEnquiries" asp-action="Delete"
+                                          asp-route-id="@item.ContactEnquiryId" method="post" class="d-inline"
+                                          onsubmit="return confirm('Delete this enquiry?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>

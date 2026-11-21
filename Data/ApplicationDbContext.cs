@@ -28,6 +28,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Review> Reviews { get; set; }
 
+    public DbSet<ContactEnquiry> ContactEnquiries { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

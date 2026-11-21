@@ -104,23 +104,3 @@ if (fadeElements.length > 0) {
     });
   }
 }
-
-// ---------- Contact form: no backend yet, show a confirmation message ----------
-var contactForm = document.getElementById("contactForm");
-
-if (contactForm) {
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    var msg = document.getElementById("contactSuccess");
-    if (!msg) {
-      msg = document.createElement("p");
-      msg.id = "contactSuccess";
-      msg.className = "text-success small mt-2";
-      contactForm.appendChild(msg);
-    }
-    msg.style.display = "block";
-    msg.textContent =
-      "Thank you! Your message has been received. We will get back to you soon.";
-  });
-}
