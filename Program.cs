@@ -14,6 +14,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Background service: cancels Pending bookings whose 15-minute hold expired.
 builder.Services.AddHostedService<PendingBookingExpiryService>();
 
+// Email notifications (Gmail SMTP). Password comes from user-secrets / environment, never appsettings.json.
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IBookingEmailService, BookingEmailService>();
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {

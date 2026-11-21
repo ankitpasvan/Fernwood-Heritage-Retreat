@@ -1,5 +1,6 @@
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using HotelBookingSystem.Services;
 using HotelBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace HotelBookingSystem.Controllers;
 public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IBookingEmailService _bookingEmailService;
 
-    public AdminController(ApplicationDbContext context)
+    public AdminController(ApplicationDbContext context, IBookingEmailService bookingEmailService)
     {
         _context = context;
+        _bookingEmailService = bookingEmailService;
     }
 
     // GET: /Admin/Dashboard
@@ -47,19 +50,19 @@ public class AdminController : Controller
                 .SumAsync(p => (decimal?)p.Amount) ?? 0,
             PendingReviews = await _context.Reviews.CountAsync(r => !r.IsApproved),
             RecentBookings = await _context.Bookings
-                .Include(b => b.Room).ThenInclude(r => r.RoomType)
+                .Include(b => b.Room).ThenInclude(r => r!.RoomType)
                 .Include(b => b.User)
                 .OrderByDescending(b => b.CreatedAt)
                 .Take(8)
                 .ToListAsync(),
             TodayCheckIns = await _context.Bookings
-                .Include(b => b.Room).ThenInclude(r => r.RoomType)
+                .Include(b => b.Room).ThenInclude(r => r!.RoomType)
                 .Include(b => b.User)
                 .Where(b => b.Status == "Confirmed" && b.CheckInDate == today)
                 .OrderBy(b => b.CreatedAt)
                 .ToListAsync(),
             TodayCheckOuts = await _context.Bookings
-                .Include(b => b.Room).ThenInclude(r => r.RoomType)
+                .Include(b => b.Room).ThenInclude(r => r!.RoomType)
                 .Include(b => b.User)
                 .Where(b => b.Status == "CheckedIn" && b.CheckOutDate == today)
                 .OrderBy(b => b.CreatedAt)
@@ -76,7 +79,7 @@ public class AdminController : Controller
         await ExpirePendingBookingsAsync();
 
         var query = _context.Bookings
-            .Include(b => b.Room).ThenInclude(r => r.RoomType)
+            .Include(b => b.Room).ThenInclude(r => r!.RoomType)
             .Include(b => b.User)
             .Include(b => b.Payments)
             .AsQueryable();
@@ -108,7 +111,7 @@ public class AdminController : Controller
         if (id == null) return NotFound();
 
         var booking = await _context.Bookings
-            .Include(b => b.Room).ThenInclude(r => r.RoomType)
+            .Include(b => b.Room).ThenInclude(r => r!.RoomType)
             .Include(b => b.User)
             .Include(b => b.Payments)
             .Include(b => b.Review)
@@ -194,6 +197,17 @@ public class AdminController : Controller
         booking.Status = "Cancelled";
         await _context.SaveChangesAsync();
 
+        // Booking is now Cancelled and saved. Only now send the cancellation email.
+        var cancelledBooking = await _context.Bookings
+            .Include(b => b.User)
+            .Include(b => b.Room).ThenInclude(r => r!.RoomType)
+            .Include(b => b.Payments)
+            .FirstOrDefaultAsync(b => b.BookingId == booking.BookingId);
+        if (cancelledBooking != null)
+        {
+            await _bookingEmailService.SendBookingCancellationAsync(cancelledBooking);
+        }
+
         TempData["SuccessMessage"] = $"Booking {booking.BookingRef} has been cancelled.";
         return RedirectToAction("BookingDetails", new { id });
     }
@@ -251,7 +265,7 @@ public class AdminController : Controller
     public async Task<IActionResult> Payments(string? status)
     {
         var query = _context.Payments
-            .Include(p => p.Booking).ThenInclude(b => b.User)
+            .Include(p => p.Booking).ThenInclude(b => b!.User)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(status))

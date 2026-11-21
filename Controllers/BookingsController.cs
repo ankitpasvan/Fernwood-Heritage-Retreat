@@ -1,5 +1,6 @@
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using HotelBookingSystem.Services;
 using HotelBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ namespace HotelBookingSystem.Controllers;
 public class BookingsController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IBookingEmailService _bookingEmailService;
 
-    public BookingsController(ApplicationDbContext context)
+    public BookingsController(ApplicationDbContext context, IBookingEmailService bookingEmailService)
     {
         _context = context;
+        _bookingEmailService = bookingEmailService;
     }
 
     private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -165,7 +168,7 @@ public class BookingsController : Controller
         if (id == null) return NotFound();
 
         var booking = await _context.Bookings
-            .Include(b => b.Room).ThenInclude(r => r.RoomType)
+            .Include(b => b.Room).ThenInclude(r => r!.RoomType)
             .Include(b => b.User)
             .Include(b => b.Payments)
             .FirstOrDefaultAsync(b => b.BookingId == id);
@@ -183,7 +186,7 @@ public class BookingsController : Controller
     public async Task<IActionResult> MyBookings()
     {
         var bookings = await _context.Bookings
-            .Include(b => b.Room).ThenInclude(r => r.RoomType)
+            .Include(b => b.Room).ThenInclude(r => r!.RoomType)
             .Where(b => b.UserId == CurrentUserId)
             .OrderByDescending(b => b.CreatedAt)
             .ToListAsync();
@@ -227,6 +230,17 @@ public class BookingsController : Controller
 
         booking.Status = "Cancelled";
         await _context.SaveChangesAsync();
+
+        // Booking is now Cancelled and saved. Only now send the cancellation email.
+        var cancelledBooking = await _context.Bookings
+            .Include(b => b.User)
+            .Include(b => b.Room).ThenInclude(r => r!.RoomType)
+            .Include(b => b.Payments)
+            .FirstOrDefaultAsync(b => b.BookingId == booking.BookingId);
+        if (cancelledBooking != null)
+        {
+            await _bookingEmailService.SendBookingCancellationAsync(cancelledBooking);
+        }
 
         TempData["SuccessMessage"] = $"Booking {booking.BookingRef} has been cancelled. The room is free for other guests now.";
         return RedirectToAction("Details", new { id });

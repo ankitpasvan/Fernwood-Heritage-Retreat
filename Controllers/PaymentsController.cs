@@ -1,5 +1,6 @@
 using HotelBookingSystem.Data;
 using HotelBookingSystem.Models;
+using HotelBookingSystem.Services;
 using HotelBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace HotelBookingSystem.Controllers;
 public class PaymentsController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IBookingEmailService _bookingEmailService;
 
-    public PaymentsController(ApplicationDbContext context)
+    public PaymentsController(ApplicationDbContext context, IBookingEmailService bookingEmailService)
     {
         _context = context;
+        _bookingEmailService = bookingEmailService;
     }
 
     private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -147,6 +150,18 @@ public class PaymentsController : Controller
         {
             TempData["ErrorMessage"] = "This booking already has a successful payment recorded. Please check the booking details.";
             return RedirectToAction("Details", "Bookings", new { id = booking.BookingId });
+        }
+
+        // Booking is now Confirmed and saved. Only now send the confirmation email.
+        // Email failure cannot break the booking: the service catches and logs it.
+        var confirmedBooking = await _context.Bookings
+            .Include(b => b.User)
+            .Include(b => b.Room).ThenInclude(r => r!.RoomType)
+            .Include(b => b.Payments)
+            .FirstOrDefaultAsync(b => b.BookingId == booking.BookingId);
+        if (confirmedBooking != null)
+        {
+            await _bookingEmailService.SendBookingConfirmationAsync(confirmedBooking);
         }
 
         TempData["SuccessMessage"] = $"Demo payment successful. Booking {booking.BookingRef} is confirmed. (No real money was charged - this is a mock payment for the college demo.)";
