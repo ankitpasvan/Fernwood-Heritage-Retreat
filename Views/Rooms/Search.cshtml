@@ -4,99 +4,105 @@
     ViewData["Title"] = "Search Rooms";
 }
 
-<!-- PAGE BANNER -->
-<section class="page-banner">
-    <img class="page-banner-img" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=1920&q=80"
-         alt="Room at Fernwood" />
-    <div class="page-banner-overlay"></div>
-    <div class="container page-banner-content">
-        <h1 class="page-banner-title">Search Available Rooms</h1>
-        <p class="page-breadcrumb"><a asp-controller="Home" asp-action="Index">Home</a> &raquo; <a
-            asp-controller="Rooms" asp-action="Index">Rooms</a> &raquo; Search</p>
-        </div>
-    </section>
+<section class="container py-5">
+    <h1 class="heritage-title mb-1">Search Rooms</h1>
+    <p class="text-muted mb-4">Choose your dates and guests to see live availability and total prices.</p>
 
-    <!-- SEARCH -->
-    <section class="section fade-in">
-        <div class="container">
-            <form method="get" asp-action="Search" class="card shadow-sm p-4 mb-4">
-                <div asp-validation-summary="All" class="text-danger mb-3"></div>
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label" for="checkIn">Check-in</label>
-                        <input class="form-control" type="date" id="checkIn" name="checkIn"
-                               value="@Model.CheckInDate.ToString("yyyy-MM-dd")" required />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label" for="checkOut">Check-out</label>
-                        <input class="form-control" type="date" id="checkOut" name="checkOut"
-                               value="@Model.CheckOutDate.ToString("yyyy-MM-dd")" required />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label" for="adults">Adults</label>
-                        <input class="form-control" type="number" id="adults" name="adults" value="@Model.Adults" min="1"
-                               max="10" required />
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label" for="children">Children</label>
-                        <input class="form-control" type="number" id="children" name="children" value="@Model.Children"
-                               min="0" max="10" />
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-heritage w-100">Search</button>
-                    </div>
-                </div>
+    <form asp-action="Search" method="get" class="card p-3 mb-4">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label" for="checkIn">Check-in</label>
+                <input class="form-control" type="date" id="checkIn" name="checkIn"
+                       value="@Model.CheckInDate.ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="checkOut">Check-out</label>
+                <input class="form-control" type="date" id="checkOut" name="checkOut"
+                       value="@Model.CheckOutDate.ToString("yyyy-MM-dd")" required />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" for="adults">Adults</label>
+                <input class="form-control" type="number" id="adults" name="adults" value="@Model.Adults" min="1"
+                       max="10" required />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" for="children">Children</label>
+                <input class="form-control" type="number" id="children" name="children" value="@Model.Children" min="0"
+                       max="10" />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-heritage w-100">Search</button>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Searched)
+    {
+        <p class="text-muted">@Model.Results.Count room type(s) available for @Model.Nights night(s), @Model.Guests guest(s)
+            (@Model.CheckInDate.ToString("dd MMM yyyy") - @Model.CheckOutDate.ToString("dd MMM yyyy")).</p>
+
+            <form asp-action="Search" method="get" class="d-flex align-items-center gap-2 mb-3">
+                <input type="hidden" name="checkIn" value="@Model.CheckInDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="checkOut" value="@Model.CheckOutDate.ToString("yyyy-MM-dd")" />
+                <input type="hidden" name="adults" value="@Model.Adults" />
+                <input type="hidden" name="children" value="@Model.Children" />
+                <label class="form-label mb-0" for="sortBy">Sort by</label>
+                <select class="form-select w-auto" id="sortBy" name="sortBy">
+                    @if ((string?)ViewBag.SortBy == "priceDesc")
+                    {
+                        <option value="priceAsc">Price: Low to High</option>
+                        <option value="priceDesc" selected>Price: High to Low</option>
+                    }
+                    else
+                    {
+                        <option value="priceAsc" selected>Price: Low to High</option>
+                        <option value="priceDesc">Price: High to Low</option>
+                    }
+                </select>
+                <button type="submit" class="btn btn-outline-secondary btn-sm">Sort</button>
             </form>
 
-            @if (Model.Searched)
+            @if (!Model.Results.Any())
             {
-                <p class="text-muted">@Model.Results.Count room type(s) available for @Model.Nights night(s), @Model.Guests
-                    guest(s)
-                    (@Model.CheckInDate.ToString("dd MMM yyyy") - @Model.CheckOutDate.ToString("dd MMM yyyy")).</p>
+                <div class="alert alert-warning">No rooms are available for these dates and guests. Please try different dates.
+                </div>
+            }
 
-                    @if (!Model.Results.Any())
-                    {
-                        <div class="alert alert-warning">No rooms are available for these dates and guests. Please try different dates.
-                        </div>
-                    }
-
-                    <div class="row">
-                        @foreach (var room in Model.Results)
-                        {
-                            <div class="col-md-4 mb-4">
-                                <div class="card room-card h-100">
-                                    @if (!string.IsNullOrEmpty(room.ImageUrl))
+            <div class="row">
+                @foreach (var room in Model.Results)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card room-card h-100">
+                            @if (!string.IsNullOrEmpty(room.ImageUrl))
+                            {
+                                <img src="@room.ImageUrl" class="card-img-top" alt="@room.Name" />
+                            }
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">@room.Name</h5>
+                                <p class="text-muted small mb-2">@room.SizeSqFt sq.ft &bull; @room.BedType &bull; @room.ViewType
+                                    &bull; Up to @room.MaxGuests guests</p>
+                                    <p class="card-text flex-grow-1">@room.Description</p>
+                                    @if (room.AmenityNames.Any())
                                     {
-                                        <img src="@room.ImageUrl" class="card-img-top" alt="@room.Name" />
+                                        <p class="small text-muted mb-2">@string.Join(" • ", room.AmenityNames)</p>
                                     }
-                                    <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title">@room.Name</h5>
-                                        <p class="text-muted small mb-2">@room.SizeSqFt sq.ft &bull; @room.BedType &bull; @room.ViewType
-                                            &bull; Up to @room.MaxGuests guests</p>
-                                            <p class="card-text flex-grow-1">@room.Description</p>
-                                            @if (room.AmenityNames.Any())
-                                            {
-                                                <p class="small text-muted mb-2">@string.Join(" • ", room.AmenityNames)</p>
-                                            }
-                                            <p class="small mb-2">@room.AvailableRooms room(s) available</p>
-                                            <p class="mb-2"><strong>₹@room.TotalPrice.ToString("N0")</strong><span class="text-muted small">
-                                                for
-                                                @Model.Nights night(s)</span> (₹@room.PricePerNight.ToString("N0") / night)</p>
-                                                <div class="mt-auto">
-                                                    <a class="btn btn-heritage btn-sm" asp-action="Details" asp-route-id="@room.RoomTypeId"
-                                                       asp-route-checkIn="@Model.CheckInDate.ToString("yyyy-MM-dd")"
-                                                       asp-route-checkOut="@Model.CheckOutDate.ToString("yyyy-MM-dd")"
-                                                       asp-route-adults="@Model.Adults" asp-route-children="@Model.Children">View Details</a>
-                                                </div>
-                                            </div>
+                                    <p class="small mb-2">@room.AvailableRooms room(s) available</p>
+                                    <p class="mb-2"><strong>₹@room.TotalPrice.ToString("N0")</strong><span class="text-muted small"> for
+                                        @Model.Nights night(s)</span> (₹@room.PricePerNight.ToString("N0") / night)</p>
+                                        <div class="mt-auto">
+                                            <a class="btn btn-heritage btn-sm" asp-action="Details" asp-route-id="@room.RoomTypeId"
+                                               asp-route-checkIn="@Model.CheckInDate.ToString("yyyy-MM-dd")"
+                                               asp-route-checkOut="@Model.CheckOutDate.ToString("yyyy-MM-dd")"
+                                               asp-route-adults="@Model.Adults" asp-route-children="@Model.Children">View Details</a>
                                         </div>
                                     </div>
-                                }
+                                </div>
                             </div>
                         }
-        else
-                        {
-                            <p class="text-muted">Select your dates and guests above to see available rooms with total prices.</p>
-                        }
                     </div>
-                </section>
+                }
+    else
+                {
+                    <p class="text-muted">Select your dates and guests above to see available rooms with total prices.</p>
+                }
+            </section>

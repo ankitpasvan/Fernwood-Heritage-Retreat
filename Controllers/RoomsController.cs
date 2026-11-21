@@ -45,7 +45,7 @@ public class RoomsController : Controller
         return View(cards[0]);
     }
 
-    public async Task<IActionResult> Search(DateOnly? checkIn, DateOnly? checkOut, int adults = 2, int children = 0, int guests = 0)
+    public async Task<IActionResult> Search(DateOnly? checkIn, DateOnly? checkOut, int adults = 2, int children = 0, int guests = 0, string? sortBy = null)
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
 
@@ -56,6 +56,8 @@ public class RoomsController : Controller
             Adults = adults,
             Children = children
         };
+
+        ViewBag.SortBy = sortBy;
 
         if (guests > 0 && children == 0 && guests > adults)
         {
@@ -104,13 +106,15 @@ public class RoomsController : Controller
 
         model.Searched = true;
 
-        var types = await _context.RoomTypes
+        var typesQuery = _context.RoomTypes
             .Where(rt => rt.IsActive
                 && model.Adults <= rt.MaxAdults
                 && model.Children <= rt.MaxChildren
-                && model.Guests <= rt.MaxGuests)
-            .OrderBy(rt => rt.PricePerNight)
-            .ToListAsync();
+                && model.Guests <= rt.MaxGuests);
+
+        var types = sortBy == "priceDesc"
+            ? await typesQuery.OrderByDescending(rt => rt.PricePerNight).ToListAsync()
+            : await typesQuery.OrderBy(rt => rt.PricePerNight).ToListAsync();
 
         var cards = await BuildCardsAsync(types, model.CheckInDate, model.CheckOutDate);
 

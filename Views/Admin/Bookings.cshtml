@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = "Manage Bookings";
     string[] statuses = new[] { "Pending", "Confirmed", "CheckedIn", "CheckedOut", "Cancelled", "NoShow" };
+    (string Value, string Label)[] sorts = new[]
+    {
+        ("", "Newest first"),
+        ("oldest", "Oldest first"),
+        ("amountHigh", "Amount: High to Low"),
+        ("amountLow", "Amount: Low to High")
+    };
 }
 
 <!-- PAGE BANNER -->
@@ -22,12 +29,12 @@
         <div class="container">
             <form method="get" asp-controller="Admin" asp-action="Bookings" class="card shadow-sm p-3 mb-4">
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <label class="form-label" for="search">Search (booking ref, guest name or email)</label>
                         <input class="form-control" type="text" id="search" name="search" value="@ViewBag.Search"
                                placeholder="FH-000001 or guest name" />
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label" for="status">Status</label>
                         <select class="form-select" id="status" name="status">
                             <option value="">All statuses</option>
@@ -40,6 +47,22 @@
                                 else
                                 {
                                     <option value="@s">@s</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label" for="sortBy">Sort by</label>
+                        <select class="form-select" id="sortBy" name="sortBy">
+                            @foreach (var s in sorts)
+                            {
+                                if ((string?)ViewBag.SortBy == s.Value)
+                                {
+                                    <option value="@s.Value" selected>@s.Label</option>
+                                }
+                                else
+                                {
+                                    <option value="@s.Value">@s.Label</option>
                                 }
                             }
                         </select>
@@ -77,7 +100,7 @@
                                     <tr>
                                         <td><strong>@b.BookingRef</strong></td>
                                         <td>@(b.User?.FullName ?? "-")<br /><span class="text-muted small">@(b.User?.Email ??
-                                                        "-")</span></td>
+                                                                                                "-")</span></td>
                                             <td>@(b.Room?.RoomNumber ?? "-") - @(b.Room?.RoomType?.Name ?? "-")</td>
                                             <td>@b.CheckInDate.ToString("dd MMM yyyy") - @b.CheckOutDate.ToString("dd MMM yyyy")</td>
                                             <td>@b.Guests</td>

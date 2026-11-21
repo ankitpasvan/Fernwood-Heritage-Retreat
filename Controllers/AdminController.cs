@@ -72,9 +72,9 @@ public class AdminController : Controller
         return View(model);
     }
 
-    // GET: /Admin/Bookings?search=FH-000001&status=Confirmed
+    // GET: /Admin/Bookings?search=FH-000001&status=Confirmed&sortBy=amountHigh
     [HttpGet]
-    public async Task<IActionResult> Bookings(string? search, string? status)
+    public async Task<IActionResult> Bookings(string? search, string? status, string? sortBy)
     {
         await ExpirePendingBookingsAsync();
 
@@ -97,10 +97,17 @@ public class AdminController : Controller
                 || b.User!.Email.Contains(s));
         }
 
-        var list = await query.OrderByDescending(b => b.CreatedAt).ToListAsync();
+        var list = sortBy switch
+        {
+            "oldest" => await query.OrderBy(b => b.CreatedAt).ToListAsync(),
+            "amountHigh" => await query.OrderByDescending(b => b.TotalAmount).ToListAsync(),
+            "amountLow" => await query.OrderBy(b => b.TotalAmount).ToListAsync(),
+            _ => await query.OrderByDescending(b => b.CreatedAt).ToListAsync()
+        };
 
         ViewBag.Search = search;
         ViewBag.Status = status;
+        ViewBag.SortBy = sortBy;
         return View(list);
     }
 
