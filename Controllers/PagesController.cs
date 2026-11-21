@@ -37,6 +37,12 @@ public class PagesController : Controller
         return View();
     }
 
+    [Route("Faq")]
+    public IActionResult Faq()
+    {
+        return View();
+    }
+
     [Route("Contact")]
     public IActionResult Contact()
     {
