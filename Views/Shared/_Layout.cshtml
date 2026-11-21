@@ -171,46 +171,83 @@ isCurrent("Pages", "Faq");
                                                                                 @RenderBody()
                                                                             </main>
 
-                                                                            <footer class="footer-heritage pt-5 pb-3 mt-5">
-                                                                                <div class="container">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-4 mb-4">
-                                                                                            <h5 class="footer-brand">Fernwood Heritage Retreat</h5>
-                                                                                            <p class="mb-0">A quiet heritage stay above the valley. Old stone walls, wooden ceilings, valley
-                                                                                                views, homely food and bonfire evenings.</p>
-                                                                                            </div>
-                                                                                            <div class="col-md-4 mb-4">
-                                                                                                <h6>Quick Links</h6>
-                                                                                                <div class="footer-links">
-                                                                                                    <a asp-controller="Home" asp-action="Index">Home</a>
-                                                                                                    <a asp-controller="Rooms" asp-action="Index">Rooms</a>
-                                                                                                    <a asp-controller="Pages" asp-action="Dining">Dining</a>
-                                                                                                    <a asp-controller="Pages" asp-action="Experiences">Experiences</a>
-                                                                                                    <a asp-controller="Pages" asp-action="Gallery">Gallery</a>
-                                                                                                    <a asp-controller="Pages" asp-action="About">About</a>
-                                                                                                    <a asp-controller="Reviews" asp-action="Index">Reviews</a>
-                                                                                                    <a asp-controller="Pages" asp-action="Contact">Contact</a>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-md-4 mb-4">
-                                                                                                <h6>Contact</h6>
-                                                                                                <p class="mb-1">Fernwood Estate, Jharipani Road, Mussoorie Hills, Mussoorie, Uttarakhand</p>
-                                                                                                <p class="mb-1">Phone: +91 98765 43210</p>
-                                                                                                <p class="mb-1">Email: stay@fernwoodheritage.in</p>
+                                                                            <footer class="footer-heritage">
+                                                                                <div class="container footer-main">
+                                                                                    <div class="row g-4">
+                                                                                        <div class="col-lg-4 col-md-6">
+                                                                                            <a class="footer-brand" asp-controller="Home" asp-action="Index">
+                                                                                                Fernwood <span class="footer-brand-gold">Heritage Retreat</span>
+                                                                                            </a>
+                                                                                            <ul class="footer-contact">
+                                                                                                <li>
+                                                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                         aria-hidden="true">
+                                                                                                        <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z" />
+                                                                                                        <circle cx="12" cy="10" r="2.5" />
+                                                                                                    </svg>
+                                                                                                    <span>Fernwood Estate, Jharipani Road, Mussoorie Hills,<br />Mussoorie, Uttarakhand</span>
+                                                                                                </li>
+                                                                                            </ul>
+                                                                                            <div class="footer-contact-row">
+                                                                                                <span class="footer-contact-item">
+                                                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                                                                        <path
+                                                                                                        d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" />
+                                                                                                    </svg>
+                                                                                                    +91 98765 43210
+                                                                                                </span>
+                                                                                                <span class="footer-contact-item">
+                                                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                                                                                         stroke-linejoin="round" aria-hidden="true">
+                                                                                                        <rect x="3" y="5" width="18" height="14" rx="2" />
+                                                                                                        <path d="m3 7 9 6 9-6" />
+                                                                                                    </svg>
+                                                                                                    stay@fernwoodheritage.in
+                                                                                                </span>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <hr />
-                                                                                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                                                                                            <p class="mb-1 mb-md-0">&copy; 2026 Fernwood Heritage Retreat. All rights reserved.</p>
-                                                                                            <a class="text-decoration-none" asp-controller="Home" asp-action="Privacy"
-                                                                                               style="color: #D8CFC0;">Privacy Policy</a>
+                                                                                        <div class="col-lg-2 col-md-6">
+                                                                                            <h6 class="footer-heading">Hotel</h6>
+                                                                                            <div class="footer-links">
+                                                                                                <a asp-controller="Rooms" asp-action="Index">Rooms &amp; Suites</a>
+                                                                                                <a asp-controller="Pages" asp-action="Gallery">Hotel Gallery</a>
+                                                                                                <a asp-controller="Pages" asp-action="About">About</a>
+                                                                                                <a asp-controller="Pages" asp-action="Contact">Hotel Contact</a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-lg-2 col-md-6">
+                                                                                            <h6 class="footer-heading">Dining</h6>
+                                                                                            <div class="footer-links">
+                                                                                                <a asp-controller="Pages" asp-action="Dining">Dining</a>
+                                                                                                <a asp-controller="Pages" asp-action="Experiences">Experiences</a>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-lg-4 col-md-6">
+                                                                                            <h6 class="footer-heading">Private Offers</h6>
+                                                                                            <form class="subscribe-form" asp-controller="Pages" asp-action="Subscribe" method="post">
+                                                                                                <input type="email" name="email" placeholder="your@email.com" required
+                                                                                                       aria-label="Email for private offers" />
+                                                                                                <button type="submit" aria-label="Subscribe">&rarr;</button>
+                                                                                            </form>
+                                                                                            @if (TempData["SubscribeMessage"] != null)
+                                                                                            {
+                                                                                                <p class="subscribe-message">@TempData["SubscribeMessage"]</p>
+                                                                                            }
                                                                                         </div>
                                                                                     </div>
-                                                                                </footer>
+                                                                                </div>
+                                                                                <div class="footer-bottom">
+                                                                                    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+                                                                                        <p>&copy; 2026 Fernwood Heritage Retreat. All rights reserved.</p>
+                                                                                        <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </footer>
 
-                                                                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-                                                                                <script src="~/js/site.js" asp-append-version="true"></script>
-                                                                                @await RenderSectionAsync("Scripts", required: false)
-                                                                            </body>
+                                                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                                                                            <script src="~/js/site.js" asp-append-version="true"></script>
+                                                                            @await RenderSectionAsync("Scripts", required: false)
+                                                                        </body>
 
-                                                                        </html>
+                                                                    </html>

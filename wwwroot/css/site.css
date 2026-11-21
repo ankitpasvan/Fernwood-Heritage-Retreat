@@ -57,7 +57,11 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
 
 .booking-bar-section { margin-top: -58px; position: relative; z-index: 3; }
 
-.booking-bar { padding: 22px; border: none; border-radius: 14px; background: #fff; }
+.booking-bar { padding: 22px; border: 1px solid #EDE6D8; border-radius: 20px; background: #fff; }
+
+.booking-bar .form-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--heritage-red); margin-bottom: 4px; }
+
+.booking-bar .form-control, .booking-bar .form-select { border-radius: 10px; }
 
 .section { padding: 72px 0; }
 
@@ -102,18 +106,6 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
 .review-card { border: none; border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
 
 .stars { color: var(--gold); letter-spacing: 2px; font-size: 1.05rem; }
-
-.footer-heritage { background: var(--wood); color: #EDE6D8; }
-
-.footer-heritage h5, .footer-heritage h6 { color: #fff; font-family: 'Playfair Display', serif; }
-
-.footer-brand { color: #fff; }
-
-.footer-links a { color: #D8CFC0; text-decoration: none; display: block; padding: 3px 0; }
-
-.footer-links a:hover { color: #fff; }
-
-.footer-heritage .text-muted { color: #CFC6B8 !important; }
 
 .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
 
@@ -241,7 +233,7 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
 
 .hero-carousel .hero-content { text-align: center; padding-top: 110px; padding-bottom: 160px; }
 
-.hero-carousel .hero-content h1 { font-size: 3.6rem; }
+.hero-carousel .hero-content h1 { font-size: 4rem; }
 
 .hero-carousel .hero-sub { margin-left: auto; margin-right: auto; }
 
@@ -324,9 +316,6 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
 
 .review-meta { font-size: 0.85rem; color: var(--muted); }
 
-/* Location */
-.location-map { width: 100%; height: 380px; border: 0; border-radius: 20px; }
-
 /* Homepage responsive */
 @media (max-width: 768px) {
     .hero-carousel { min-height: 84vh; }
@@ -337,7 +326,6 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
     .hero-next { right: 8px; }
     .exp-tall { height: 360px; }
     .amenity-list { grid-template-columns: repeat(2, 1fr); }
-    .location-map { height: 300px; }
 }
 
 /* Reduced motion: no auto animation */
@@ -347,4 +335,58 @@ h1, h2, h3, h4, h5, .section-title { font-family: 'Playfair Display', serif; }
     .hero-slide-img { animation: none; }
     .fade-in { transition: none; }
     .room-card, .gallery-img, .img-zoom, .exp-tall img { transition: none; }
+}
+
+/* ---------- Premium footer (reference style) ---------- */
+.footer-heritage { background: #17130F; color: #EDE6D8; margin-top: 0; }
+
+.footer-main { padding: 64px 0 56px; }
+
+.footer-brand { display: inline-block; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.6rem; color: #fff; text-decoration: none; margin-bottom: 24px; }
+
+.footer-brand:hover { color: #fff; }
+
+.footer-brand-gold { color: var(--gold); }
+
+.footer-contact { list-style: none; padding: 0; margin: 0 0 16px; }
+
+.footer-contact li { display: flex; gap: 10px; color: #D8CFC0; }
+
+.footer-contact svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--gold); margin-top: 2px; }
+
+.footer-contact-row { display: flex; gap: 24px; flex-wrap: wrap; }
+
+.footer-contact-item { display: inline-flex; align-items: center; gap: 8px; color: #D8CFC0; }
+
+.footer-contact-item svg { width: 18px; height: 18px; color: var(--gold); }
+
+.footer-heading { font-size: 0.8rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+
+.footer-links a { color: #D8CFC0; text-decoration: none; display: block; padding: 5px 0; transition: color 0.2s ease; }
+
+.footer-links a:hover { color: var(--gold); }
+
+.subscribe-form { display: flex; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.25); padding-bottom: 8px; max-width: 340px; }
+
+.subscribe-form input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; color: #fff; font-size: 0.95rem; padding: 0; }
+
+.subscribe-form input::placeholder { color: rgba(255, 255, 255, 0.45); }
+
+.subscribe-form button { background: transparent; border: none; color: var(--gold); font-size: 1.3rem; line-height: 1; padding: 0 0 0 12px; cursor: pointer; transition: transform 0.2s ease; }
+
+.subscribe-form button:hover { transform: translateX(4px); }
+
+.subscribe-message { color: var(--gold); font-size: 0.9rem; margin: 12px 0 0; }
+
+.footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.08); padding: 20px 0; font-size: 0.9rem; }
+
+.footer-bottom p { margin-bottom: 0; color: #D8CFC0; }
+
+.footer-bottom a { color: #D8CFC0; text-decoration: none; transition: color 0.2s ease; }
+
+.footer-bottom a:hover { color: var(--gold); }
+
+@media (max-width: 767.98px) {
+    .footer-main { padding: 48px 0 36px; }
+    .footer-bottom .container { flex-direction: column; text-align: center; gap: 6px; }
 }
