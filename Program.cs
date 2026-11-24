@@ -33,9 +33,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
-// Render terminates TLS at its edge and forwards X-Forwarded-Proto.
-// Without this, UseHttpsRedirection would redirect in a loop on Render.
-// Render's proxy IPs are not fixed, so known proxies/networks are cleared.
+
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;

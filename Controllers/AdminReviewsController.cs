@@ -20,7 +20,7 @@ public class AdminReviewsController : Controller
     public async Task<IActionResult> Index(string? filter)
     {
         var query = _context.Reviews
-            .Include(r => r.Booking).ThenInclude(b => b.User)
+            .Include(r => r.Booking).ThenInclude(b => b!.User)
             .Include(r => r.RoomType)
             .AsQueryable();
 
